@@ -133,12 +133,12 @@
                 </li>
                 <li>
                     <a href="events" aria-expanded="false">
-                        <i class="fa fa-users" aria-hidden="true"></i><span class="nav-text">Events
+                        <i class="fa fa-calendar" aria-hidden="true"></i><span class="nav-text">Events
                     </span>
                     </a>
                 </li>
                 <li>
-                    <a href="" aria-expanded="false">
+                    <a href="users" aria-expanded="false">
                         <i class="fa fa-users" aria-hidden="true"></i><span class="nav-text">Users
                     </span>
                     </a>
