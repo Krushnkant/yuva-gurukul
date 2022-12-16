@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\EventFees;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Helpers;
 use Carbon\Carbon;
 
 class EventController extends BaseController
@@ -15,7 +17,6 @@ class EventController extends BaseController
     {
     
         $event = Event::where( Event::raw('now()'), '<=', Event::raw('event_start_time'))->orderBy('event_start_time', 'asc')->first();
-        
         $events_arr = array();
         $temp = array();
         $temp['id'] = $event->id;
