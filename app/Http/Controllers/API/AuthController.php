@@ -30,7 +30,7 @@ class AuthController extends BaseController
             if($user->estatus != 1){
                 return $this->sendError("Your account is de-activated by admin.", "Account De-active", []);
             }
-            $data['otp'] =  mt_rand(100000,999999);
+            $data['otp'] =  mt_rand(1000,9999);
             $user->otp = $data['otp'];
             $user->save();
             
@@ -40,7 +40,7 @@ class AuthController extends BaseController
             //send_sms($mobile_no, $data['otp']);
             return $this->sendResponseWithData($final_data, 'Send OTP successfully.');
         }else{
-            $data['otp'] =  mt_rand(100000,999999);
+            $data['otp'] =  mt_rand(1000,9999);
             $user = new User();
             $user->mobile_no = $mobile_no;
             $user->otp = $data['otp'];
