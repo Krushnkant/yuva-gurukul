@@ -38,7 +38,7 @@ class AuthController extends BaseController
             array_push($final_data,$data);
 
             //send_sms($mobile_no, $data['otp']);
-            return $this->sendResponseWithData($final_data, 'User login successfully.');
+            return $this->sendResponseWithData($final_data, 'Send OTP successfully.');
         }else{
             $data['otp'] =  mt_rand(100000,999999);
             $user = new User();
@@ -48,7 +48,7 @@ class AuthController extends BaseController
             $final_data = array();
             array_push($final_data,$data);
             //send_sms($mobile_no, $data['otp']);
-            return $this->sendResponseWithData($final_data, 'User registered successfully.');
+            return $this->sendResponseWithData($final_data, 'Send OTP successfully.');
         }
     }
 
