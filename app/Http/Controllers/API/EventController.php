@@ -12,6 +12,29 @@ use Carbon\Carbon;
 
 class EventController extends BaseController
 {
+    public function getHome()
+    {
+    
+        $event = Event::where( Event::raw('now()'), '<=', Event::raw('event_start_time'))->orderBy('event_start_time', 'asc')->first();
+        
+        $events_arr = array();
+        $temp = array();
+        $temp['id'] = $event->id;
+        $temp['title'] = $event->event_title;
+        $temp['event_image'] = ($event->event_image != "")?url('/images/event_image/'.$event->event_image):"";
+        $temp['event_description'] = $event->event_description;
+        $temp['event_start_time'] = date('d-m-Y h:i A', strtotime($event->event_start_time));;
+        $temp['event_end_time'] = date('d-m-Y h:i A', strtotime($event->event_end_time));
+        $temp['event_type'] = $event->event_type;
+        $temp['event_fees'] = $event->event_fees;
+        array_push($events_arr,$temp);
+
+        $banner = array();
+        $data['banners'] = $banner;
+        $data['upcoming_event'] = $events_arr;
+        return $this->sendResponseWithData($data,"Home Retrieved Successfully.");
+    }
+
     public function getEvents(){
        
         $events = Event::with('event_fees')->where('estatus',1)->get();

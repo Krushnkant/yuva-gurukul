@@ -15,7 +15,7 @@ class AddOtpToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->text('otp')->nullable()->after('gender');
-            $table->text('is_verify')->default(0)->after('otp');
+            $table->integer('is_verify')->default(0)->after('otp');
         });
     }
 

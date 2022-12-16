@@ -41,6 +41,7 @@ Route::get('removeMemberFamily/{id}',[\App\Http\Controllers\API\UserController::
 
 Route::post('update_token',[\App\Http\Controllers\API\UserController::class,'update_token']);
 
+Route::get('getHome', [EventController::class,'getHome']);
 
 Route::get('getEvents', [EventController::class,'getEvents']);
 Route::post('viewEvent',[EventController::class,'viewEvent']);
