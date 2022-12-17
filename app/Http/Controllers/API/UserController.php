@@ -161,7 +161,7 @@ class UserController extends BaseController
     public function add_edit_member(Request $request){
         $messages = [
             'created_by_id.required' =>'Please provide a Created By Id',
-            'member_id.required' =>'Please provide a Member Id',
+            'family_member_id.required' =>'Please provide a Member Id',
             'profile_pic.image' =>'Please provide a Valid Extension Image(e.g: .jpg .png)',
             'profile_pic.mimes' =>'Please provide a Valid Extension Image(e.g: .jpg .png)',
             'first_name.required' =>'Please provide a First Name',
@@ -174,32 +174,54 @@ class UserController extends BaseController
             'role.required' =>'Please provide a role.',
         ];
 
-        $validator = Validator::make($request->all(), [
-            'created_by_id' => 'required',
-            'member_id' => 'required',
-            'profile_pic' => 'image|mimes:jpeg,png,jpg',
-            'first_name' => 'required',
-            'middle_name' => 'required',
-            'last_name' => 'required',
-            'birth_date' => 'required',
-            'gender' => 'required',
-            'zone_id' => 'required',
-            'role' => 'required',
-            'email' => ['required', 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
-                return $query->where('estatus','!=',3);
-            })],
-            'mobile_no' => ['required', 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
-                return $query->where('estatus','!=',3);
-            })],
-        ], $messages);
+        if($request->family_member_id == 0){
+            $validator = Validator::make($request->all(), [
+                'created_by_id' => 'required',
+                'family_member_id' => 'required',
+                'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                'first_name' => 'required',
+                'middle_name' => 'required',
+                'last_name' => 'required',
+                'birth_date' => 'required',
+                'gender' => 'required',
+                'zone_id' => 'required',
+                'role' => 'required',
+                'email' => ['required', 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('estatus','!=',3);
+                })],
+                'mobile_no' => ['required', 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('estatus','!=',3);
+                })],
+            ], $messages);
+
+        }else{
+            $validator = Validator::make($request->all(), [
+                'created_by_id' => 'required',
+                'family_member_id' => 'required',
+                'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                'first_name' => 'required',
+                'middle_name' => 'required',
+                'last_name' => 'required',
+                'birth_date' => 'required',
+                'gender' => 'required',
+                'zone_id' => 'required',
+                'role' => 'required',
+                'email' => ['required', 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('role', 3)->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                })],
+                'mobile_no' => ['required', 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('role', 3)->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                })],
+            ], $messages); 
+        }
 
         if ($validator->fails()) {
             return $this->sendError($validator->errors(), "Validation Errors", []);
         }
-        if($request->member_id == 0){
+        if($request->family_member_id == 0){
            $user = new User();
         }else{
-           $user = User::find($request->member_id);
+           $user = User::find($request->family_member_id);
         }
         $user->first_name = $request->first_name;
         $user->middle_name = $request->middle_name;
@@ -275,32 +297,54 @@ class UserController extends BaseController
             'role.required' =>'Please provide a role.',
         ];
 
-        $validator = Validator::make($request->all(), [
-            'created_by_id' => 'required',
-            'family_member_id' => 'required',
-            'profile_pic' => 'image|mimes:jpeg,png,jpg',
-            'first_name' => 'required',
-            'middle_name' => 'required',
-            'last_name' => 'required',
-            'birth_date' => 'required',
-            'gender' => 'required',
-            'zone_id' => 'required',
-            'role' => 'required',
-            'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
-                return $query->where('estatus','!=',3);
-            })],
-            'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
-                return $query->where('estatus','!=',3);
-            })],
-        ], $messages);
+        if($request->family_member_id == 0){
+            $validator = Validator::make($request->all(), [
+                'created_by_id' => 'required',
+                'family_member_id' => 'required',
+                'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                'first_name' => 'required',
+                'middle_name' => 'required',
+                'last_name' => 'required',
+                'birth_date' => 'required',
+                'gender' => 'required',
+                'zone_id' => 'required',
+                'role' => 'required',
+                'email' => ['required', 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('estatus','!=',3);
+                })],
+                'mobile_no' => ['required', 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('estatus','!=',3);
+                })],
+            ], $messages);
+
+        }else{
+            $validator = Validator::make($request->all(), [
+                'created_by_id' => 'required',
+                'family_member_id' => 'required',
+                'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                'first_name' => 'required',
+                'middle_name' => 'required',
+                'last_name' => 'required',
+                'birth_date' => 'required',
+                'gender' => 'required',
+                'zone_id' => 'required',
+                'role' => 'required',
+                'email' => ['required', 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('role', 3)->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                })],
+                'mobile_no' => ['required', 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('role', 3)->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                })],
+            ], $messages); 
+        }
 
         if ($validator->fails()) {
             return $this->sendError($validator->errors(), "Validation Errors", []);
         }
-        if($request->member_id == 0){
+        if($request->family_member_id == 0){
            $user = new User();
         }else{
-           $user = User::find($request->member_id);
+           $user = User::find($request->family_member_id);
         }
         $user->first_name = $request->first_name;
         $user->middle_name = $request->middle_name;

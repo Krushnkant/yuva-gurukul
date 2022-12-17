@@ -236,7 +236,7 @@ class EventController extends Controller
                       ->orderBy($order,$dir)
                       ->get();
 
-                $totalFiltered = User::where('role',2);
+                $totalFiltered = Event::where('estatus',$estatus);
                 if (isset($estatus)){
                     $totalFiltered = $totalFiltered->where('estatus',$estatus);
                 }
@@ -281,10 +281,10 @@ class EventController extends Controller
                     $eventStartDate = '<i class="fa fa-calendar" aria-hidden="true"></i> '.date('d-m-Y h:i A', strtotime($event->event_start_time));
                     $eventEndDate = '<i class="fa fa-calendar" aria-hidden="true"></i> '.date('d-m-Y h:i A', strtotime($event->event_end_time));
 
-                    $action = '<button id="addScannerUser" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#ScannerUserModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-qrcode" aria-hidden="true"></i></button>';
+                    $action = '<button id="addScannerUser" class="btn btn-gray text-primary btn-sm" data-toggle="modal" data-target="#ScannerUserModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-qrcode" aria-hidden="true"></i></button>';
                     $action .= '<button id="editEventBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#eventModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     $action .= '<button id="deleteEventBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteEventModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
-
+                    $action .= '<button id="bookingUser" class="btn btn-gray text-success btn-sm" onclick="" data-id="' .$event->id. '"><i class="fa fa-ticket" aria-hidden="true"></i></button>';
                     // $nestedData['id'] = $i;
                     $nestedData['banner'] = '<img src="'. $event_image .'" width="40px" height="40px" alt="Event Banner">';
                     $nestedData['title'] = $event_title;
@@ -363,4 +363,6 @@ class EventController extends Controller
         $user = EventHandler::where('event_id',$id)->get()->pluck('user_id');
         return response()->json($user);
     }
+
+    
 }

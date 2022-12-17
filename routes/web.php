@@ -230,7 +230,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
     Route::get('banners/{id}/edit',[\App\Http\Controllers\admin\BannerController::class,'editbanner'])->name('banners.edit');
     Route::post('banners/uploadfile',[\App\Http\Controllers\admin\BannerController::class,'uploadfile'])->name('banners.uploadfile');
     Route::post('banners/removefile',[\App\Http\Controllers\admin\BannerController::class,'removefile'])->name('banners.removefile');
-    
+
+    Route::get('bookings/{id}',[\App\Http\Controllers\admin\BookingController::class,'index'])->name('userbookings.list');
+    Route::post('allbookinglist',[\App\Http\Controllers\admin\BookingController::class,'allbookinglist'])->name('allbookinglist');
 });
 
 Route::group(['prefix'=>'admin','middleware'=>['auth','userpermission'],'as'=>'admin.'],function () {

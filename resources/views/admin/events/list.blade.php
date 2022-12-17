@@ -663,13 +663,13 @@
             'order': [[ 6, "DESC" ]],
             'columnDefs': [
                 { "width": "8%", "targets": 0 },
-                { "width": "18%", "targets": 1 },
-                { "width": "17%", "targets": 2 },
+                { "width": "12%", "targets": 1 },
+                { "width": "20%", "targets": 2 },
                 { "width": "15%", "targets": 3 },
                 { "width": "10%", "targets": 4 },
                 { "width": "10%", "targets": 5 },
                 { "width": "12%", "targets": 6 },
-                { "width": "10%", "targets": 7 },
+                { "width": "13%", "targets": 7 },
             ],
             "columns": [
                 {data: 'id', name: 'id', class: "text-center", orderable: false,
@@ -677,7 +677,7 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {data: 'banner', name: 'banner', class: "text-left"},
+                {data: 'banner', name: 'banner', class: "text-left", orderable: false},
                 {data: 'title', name: 'title', class: "text-left", orderable: false},
                 {data: 'fees', name: 'fees', class: "text-left multirow", orderable: false},
                 {data: 'startDate', name: 'startDate', class: "text-left multirow", orderable: false},
@@ -780,6 +780,12 @@
                 toastr.error("Please try again",'Error',{timeOut: 5000});
             }
         });
+    });
+
+    $('body').on('click', '#bookingUser', function () {
+        var event_id = $(this).attr('data-id');
+        var url = "{{ url('admin/bookings') }}" + "/" + event_id;
+        window.open(url,"_blank");
     });
 
  
