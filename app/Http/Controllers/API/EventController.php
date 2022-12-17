@@ -103,6 +103,20 @@ class EventController extends BaseController
         }
         $family_member_array = array();
         $family_array = array();
+
+        if($user){
+            $age = (int)$this->age($user->birth_date);
+            $family_member_array['id'] = $user->id;
+            $family_member_array['first_name'] = $user->first_name;
+            $family_member_array['middle_name'] = $user->middle_name;
+            $family_member_array['last_name'] = $user->last_name;
+            $family_member_array['age'] = $age;
+            
+            $AgeRangeCheck = EventFees::whereRaw("? BETWEEN from_age AND to_age", [$age])->where('event_id',$event->id)->first();
+            $family_member_array['fees'] = isset($AgeRangeCheck->fees)?$AgeRangeCheck->fees:0;
+            array_push($family_array,$family_member_array);
+        }
+
         foreach($user->family_member as $family_member){
           $age = (int)$this->age($family_member->birth_date);
           $family_member_array['id'] = $family_member->id;
