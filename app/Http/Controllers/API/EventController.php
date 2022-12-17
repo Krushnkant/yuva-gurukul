@@ -80,7 +80,7 @@ class EventController extends BaseController
 
        
         
-        $event = Event::with('event_fees')where('id',$request->event_id)->where('estatus',1)->first();
+        $event = Event::with('event_fees')->where('id',$request->event_id)->where('estatus',1)->first();
         if (!$event){
             return $this->sendError("Event Not Exist", "Not Found Error", []);
         }
