@@ -298,44 +298,147 @@ class UserController extends BaseController
         ];
 
         if($request->family_member_id == 0){
-            $validator = Validator::make($request->all(), [
-                'created_by_id' => 'required',
-                'family_member_id' => 'required',
-                'profile_pic' => 'image|mimes:jpeg,png,jpg',
-                'first_name' => 'required',
-                'middle_name' => 'required',
-                'last_name' => 'required',
-                'birth_date' => 'required',
-                'gender' => 'required',
-                'zone_id' => 'required',
-                'role' => 'required',
-                'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
-                    return $query->where('estatus','!=',3);
-                })],
-                'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
-                    return $query->where('estatus','!=',3);
-                })],
-            ], $messages);
+            if($request->email == "" && $request->mobile_no == ""){
+                $validator = Validator::make($request->all(), [
+                    'created_by_id' => 'required',
+                    'family_member_id' => 'required',
+                    'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birth_date' => 'required',
+                    'gender' => 'required',
+                    'zone_id' => 'required',
+                    'role' => 'required',
+                    
+                ], $messages);
 
+            }elseif($request->email == "" && $request->mobile_no != ""){
+                $validator = Validator::make($request->all(), [
+                    'created_by_id' => 'required',
+                    'family_member_id' => 'required',
+                    'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birth_date' => 'required',
+                    'gender' => 'required',
+                    'zone_id' => 'required',
+                    'role' => 'required',
+                    'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('estatus','!=',3);
+                    })],
+                ], $messages);
+            }elseif($request->email != "" && $request->mobile_no == ""){
+                $validator = Validator::make($request->all(), [
+                    'created_by_id' => 'required',
+                    'family_member_id' => 'required',
+                    'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birth_date' => 'required',
+                    'gender' => 'required',
+                    'zone_id' => 'required',
+                    'role' => 'required',
+                    'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('role', 3)->where('estatus','!=',3);
+                    })],
+                   
+                ], $messages);
+            }else{
+
+                $validator = Validator::make($request->all(), [
+                    'created_by_id' => 'required',
+                    'family_member_id' => 'required',
+                    'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birth_date' => 'required',
+                    'gender' => 'required',
+                    'zone_id' => 'required',
+                    'role' => 'required',
+                    'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                    })],
+                    'mobile_no' => ['numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('estatus','!=',3);
+                    })],
+                ], $messages);
+
+            }
         }else{
-            $validator = Validator::make($request->all(), [
-                'created_by_id' => 'required',
-                'family_member_id' => 'required',
-                'profile_pic' => 'image|mimes:jpeg,png,jpg',
-                'first_name' => 'required',
-                'middle_name' => 'required',
-                'last_name' => 'required',
-                'birth_date' => 'required',
-                'gender' => 'required',
-                'zone_id' => 'required',
-                'role' => 'required',
-                'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
-                    return $query->where('role', 3)->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
-                })],
-                'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
-                    return $query->where('role', 3)->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
-                })],
-            ], $messages); 
+            if($request->email == "" && $request->mobile_no == ""){
+                $validator = Validator::make($request->all(), [
+                    'created_by_id' => 'required',
+                    'family_member_id' => 'required',
+                    'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birth_date' => 'required',
+                    'gender' => 'required',
+                    'zone_id' => 'required',
+                    'role' => 'required',
+                ], $messages);
+
+            }elseif($request->email == "" && $request->mobile_no != ""){
+                $validator = Validator::make($request->all(), [
+                    'created_by_id' => 'required',
+                    'family_member_id' => 'required',
+                    'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birth_date' => 'required',
+                    'gender' => 'required',
+                    'zone_id' => 'required',
+                    'role' => 'required',
+                    
+                    'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                    })],
+                ], $messages);
+            }elseif($request->email != "" && $request->mobile_no == ""){
+                $validator = Validator::make($request->all(), [
+                    'created_by_id' => 'required',
+                    'family_member_id' => 'required',
+                    'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birth_date' => 'required',
+                    'gender' => 'required',
+                    'zone_id' => 'required',
+                    'role' => 'required',
+                    'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                    })],
+                    
+                ], $messages);
+            }else{
+
+                $validator = Validator::make($request->all(), [
+                    'created_by_id' => 'required',
+                    'family_member_id' => 'required',
+                    'profile_pic' => 'image|mimes:jpeg,png,jpg',
+                    'first_name' => 'required',
+                    'middle_name' => 'required',
+                    'last_name' => 'required',
+                    'birth_date' => 'required',
+                    'gender' => 'required',
+                    'zone_id' => 'required',
+                    'role' => 'required',
+                    'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                    })],
+                    'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                        return $query->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
+                    })],
+                ], $messages);
+
+            } 
         }
 
         if ($validator->fails()) {
