@@ -132,19 +132,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="banners" aria-expanded="false">
+                    <a href="{{ url('admin/banners') }}" aria-expanded="false">
                         <i class="fa fa-picture-o" aria-hidden="true"></i><span class="nav-text">Banners
                     </span>
                     </a>
                 </li>
                 <li>
-                    <a href="events" aria-expanded="false">
+                    <a href="{{ url('admin/events') }}" aria-expanded="false">
                         <i class="fa fa-calendar" aria-hidden="true"></i><span class="nav-text">Events
                     </span>
                     </a>
                 </li>
                 <li>
-                    <a href="users" aria-expanded="false">
+                    <a href="{{ url('admin/users') }}" aria-expanded="false">
                         <i class="fa fa-users" aria-hidden="true"></i><span class="nav-text">Users
                     </span>
                     </a>
