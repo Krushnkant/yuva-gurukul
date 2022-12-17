@@ -28,7 +28,6 @@
                                     <th>Total Amount</th>
                                     <th>Transaction Id</th>
                                     <th>Created Date</th>
-                                    <th>Other</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -40,7 +39,6 @@
                                     <th>Total Amount</th>
                                     <th>Transaction Id</th>
                                     <th>Created Date</th>
-                                    <th>Other</th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -60,7 +58,10 @@
 <!-- user list JS start -->
 <script type="text/javascript">
   
-
+  $(document).ready(function() {
+   
+    event_page_tabs(true);
+});
 
     function event_page_tabs(is_clearState=false) {
         if(is_clearState){
@@ -83,7 +84,7 @@
                 "url": "{{ url('admin/allbookinglist') }}",
                 "dataType": "json",
                 "type": "POST",
-                "data":{ _token: '{{ csrf_token() }}'},
+                "data":{ _token: '{{ csrf_token() }}',event_id:'{{ $id }}' },
                 // "dataSrc": ""
             },
             'order': [[ 6, "DESC" ]],
@@ -95,7 +96,6 @@
                 { "width": "10%", "targets": 4 },
                 { "width": "10%", "targets": 5 },
                 { "width": "12%", "targets": 6 },
-                { "width": "13%", "targets": 7 },
             ],
             "columns": [
                 {data: 'id', name: 'id', class: "text-center", orderable: false,
@@ -108,8 +108,7 @@
                 {data: 'total_person', name: 'total_person', class: "text-left multirow", orderable: false},
                 {data: 'total_amount', name: 'total_amount', class: "text-left multirow", orderable: false},
                 {data: 'payment_transaction_id', name: 'payment_transaction_id', orderable: false, searchable: false, class: "text-center"},
-                {data: 'created_at', name: 'created_at', searchable: false, class: "text-left"},
-                {data: 'action', name: 'action', orderable: false, searchable: false, class: "text-center"},
+                {data: 'created_at', name: 'created_at', searchable: false, class: "text-left", orderable: false},
             ]
         });
     }

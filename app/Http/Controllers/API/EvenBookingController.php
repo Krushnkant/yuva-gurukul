@@ -15,14 +15,16 @@ class EvenBookingController extends BaseController
             'user_id.required' =>'Please provide a User Id',
             'event_id.required' =>'Please provide a Event Id',
             'amount.required' =>'Please provide a Amount',
-            'total_person.required' =>'Please provide a Total Person'
+            'total_person.required' =>'Please provide a Total Person',
+            'payment_transaction_id.required' =>'Please provide a payment transaction id'
         ];
 
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'event_id' => 'required',
             'amount' => 'required',
-            'total_person' => 'required'
+            'total_person' => 'required',
+            'payment_transaction_id' => 'required'
         ], $messages);
 
         if ($validator->fails()) {
@@ -34,6 +36,7 @@ class EvenBookingController extends BaseController
         $event_boking->event_id = $request->event_id;
         $event_boking->amount = $request->amount;
         $event_boking->total_person = $request->total_person;
+        $event_boking->payment_transaction_id = $request->payment_transaction_id;
         $event_boking->created_at = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
         $event_boking->save();
 
