@@ -16,25 +16,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        {{--<h4 class="card-title">
-                            @if(isset($action) && $action=='create')
-                            Add Banner
-                            @elseif(isset($action) && $action=='edit')
-                            Edit Banner
-                            @else
-                            Banner List
-                            @endif
-                        </h4>--}}
-
                         <div class="action-section">
                             <div class="d-flex">
-                            <?php $page_id = \App\Models\ProjectPage::where('route_url','admin.banners.list')->pluck('id')->first(); ?>
-                            @if(getUSerRole()==1 || (getUSerRole()!=1 && is_write($page_id)) )
                                 <button type="button" class="btn btn-primary" id="AddBannerBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                            @endif
-                            
-
-
                             </div>
                         </div>
 
@@ -45,8 +29,7 @@
                                     <tr>
                                         <th>Sr. No</th>
                                         <th>Image</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
+                                        <th>URL</th>
                                         <th>Status</th>
                                         <th>Date</th>
                                         <th>Action</th>
@@ -56,8 +39,7 @@
                                     <tr>
                                         <th>Sr. No</th>
                                         <th>Image</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
+                                        <th>URL</th>
                                         <th>Status</th>
                                         <th>Date</th>
                                         <th>Action</th>
@@ -105,97 +87,8 @@
 
 $(document).ready(function() {
     banner_table(true);
-    $('#BannerInfo').select2({
-        width: '100%',
-        placeholder: "Select...",
-        allowClear: true,
-        autoclose: false,
-        closeOnSelect: false,
-    });
-
-    $('#value').select2({
-        width: '100%',
-        placeholder: "Select Category",
-        allowClear: false
-    });
-    $('#product').select2({
-        width: '100%',
-        placeholder: "Select Product",
-        allowClear: true
-    });
-
-
-
 });
 
-$('#BannerInfo').change(function() {
-    var bannerInfo = $(this).val();
-    if(bannerInfo == 2 || bannerInfo == 3 || bannerInfo == 4 ){
-        $('#attr-cover-spin').show();
-        $.ajax ({
-            type:"POST",
-            url: "{{ route('admin.banners.getBannerInfoVal') }}",
-            data : {bannerInfo: bannerInfo, "_token": "{{csrf_token()}}"},
-            success: function(data) {
-                // console.log(data.categories);
-                $('#infoBox').html(data.html);
-                $("#productDropdownBox").html("");
-                if(bannerInfo == 2 || bannerInfo == 3){
-                    category_dropdown(data.categories);
-                    $('#value').select2({
-                        width: '100%',
-                        placeholder: "Select Category",
-                        allowClear: false
-                    });
-                }
-            },
-            complete: function(){
-                $('#attr-cover-spin').hide();
-            }
-        });
-    } else {
-        $('#infoBox').html('');
-        $("#productDropdownBox").html("");
-    }
-});
-
-function category_dropdown(categories) {
-    var list = $("#value");
-    $.each(categories, function(index, item) {
-        list.append(new Option(item.category_name, item.id));
-    });
-}
-
-$('body').on("change",".category_dropdown_catalog",function(){
-    $("#attr-cover-spin").fadeIn();
-    var category_id = $(this).val();
-
-    $.get("{{ url('admin/banners/getproducts') }}" + '/' + category_id, function (data) {
-        if (data) {
-            var html =`<div class="form-group" id="">
-                    <label class="col-form-label" for="product">Select Product</label>
-                    <select id="product" name="product" class="">
-                        <option></option>
-                    </select>
-                    <div id="product-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                    </div>`;
-
-            $("#productDropdownBox").html(html);
-            $.each(data, function(index, item) {
-                $("#product").append(new Option(item.product_title, item.id));
-            });
-            $('#product').select2({
-                width: '100%',
-                placeholder: "Select Product",
-                allowClear: true
-            });
-            $("#attr-cover-spin").fadeOut();
-        } else {
-            $("#productDropdownBox").html("");
-            $("#attr-cover-spin").fadeOut();
-        }
-    });
-});
 
 $('body').on('click', '#AddBannerBtn', function () {
     location.href = "{{ route('admin.banners.add') }}";
@@ -329,10 +222,9 @@ function banner_table(is_clearState=false){
             { "width": "50px", "targets": 0 },
             { "width": "120px", "targets": 1 },
             { "width": "170px", "targets": 2 },
-            { "width": "100px", "targets": 3 },
-            { "width": "70px", "targets": 4 },
+            { "width": "70px", "targets": 3 },
+            { "width": "120px", "targets": 4 },
             { "width": "120px", "targets": 5 },
-            { "width": "120px", "targets": 6 },
         ],
         "columns": [
             {data: 'sr_no', name: 'sr_no', class: "text-center", orderable: false,
@@ -341,8 +233,7 @@ function banner_table(is_clearState=false){
                 }
             },
             {data: 'banner_thumb', name: 'banner_thumb', orderable: false, searchable: false, class: "text-center"},
-            {data: 'title', name: 'title', class: "text-left"},
-            {data: 'description', name: 'description', class: "text-left"},
+            {data: 'url', name: 'url', class: "text-left"},
             {data: 'estatus', name: 'estatus', orderable: false, searchable: false, class: "text-center"},
             {data: 'created_at', name: 'created_at', searchable: false, class: "text-left"},
             {data: 'action', name: 'action', orderable: false, searchable: false, class: "text-center"},

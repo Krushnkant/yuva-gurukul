@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\EventFees;
 use App\Models\EventBooking;
 use App\Models\User;
+use App\Models\Banner;
 use App\Models\EventHandler;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helpers;
@@ -17,6 +18,16 @@ class EventController extends BaseController
 {
     public function getHome()
     {
+        $btemp = array();
+        $banner_array = array();
+        $banners = Banner::where('estatus',1)->get();
+        foreach($banners as $banner){
+            $btemp['id'] = $banner->id;
+            $btemp['event_image'] = ($banner->banner_thumb != "")?url($banner->banner_thumb):"";
+            $btemp['url'] = ($banner->url != "")?$banner->url:"";
+            array_push($banner_array,$btemp);
+        }
+
         $event = Event::where( Event::raw('now()'), '<=', Event::raw('event_start_time'))->orderBy('event_start_time', 'asc')->first();
         $events_arr = array();
         $temp = array();
@@ -32,8 +43,8 @@ class EventController extends BaseController
         $temp['family_member'] = $family_array;
         array_push($events_arr,$temp);
 
-        $banner = array();
-        $data['banners'] = $banner;
+        
+        $data['banners'] = $banner_array;
         $data['upcoming_event'] = $events_arr;
         return $this->sendResponseWithData($data,"Home Retrieved Successfully.");
     }

@@ -220,6 +220,17 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
 
     Route::post('addorupdatescanneruser',[\App\Http\Controllers\admin\EventController::class,'addorupdatescanneruser'])->name('events.addorupdatescanneruser');
     Route::get('scanneruser/{id}/edit',[\App\Http\Controllers\admin\EventController::class,'editscanneruser'])->name('scanneruser.edit');
+
+    Route::get('banners',[\App\Http\Controllers\admin\BannerController::class,'index'])->name('banners.list');
+    Route::get('banners/create',[\App\Http\Controllers\admin\BannerController::class,'create'])->name('banners.add');
+    Route::post('banners/save',[\App\Http\Controllers\admin\BannerController::class,'save'])->name('banners.save');
+    Route::post('allbannerlist',[\App\Http\Controllers\admin\BannerController::class,'allbannerlist'])->name('allbannerlist');
+    Route::get('changebannerstatus/{id}',[\App\Http\Controllers\admin\BannerController::class,'changebannerstatus'])->name('banners.changeblogstatus');
+    Route::get('banners/{id}/delete',[\App\Http\Controllers\admin\BannerController::class,'deletebanner'])->name('banners.delete');
+    Route::get('banners/{id}/edit',[\App\Http\Controllers\admin\BannerController::class,'editbanner'])->name('banners.edit');
+    Route::post('banners/uploadfile',[\App\Http\Controllers\admin\BannerController::class,'uploadfile'])->name('banners.uploadfile');
+    Route::post('banners/removefile',[\App\Http\Controllers\admin\BannerController::class,'removefile'])->name('banners.removefile');
+    
 });
 
 Route::group(['prefix'=>'admin','middleware'=>['auth','userpermission'],'as'=>'admin.'],function () {
@@ -429,17 +440,7 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','userpermission'],'as'=>'a
     Route::post('blogs/removefile',[\App\Http\Controllers\admin\BlogController::class,'removefile'])->name('blogs.removefile');
 
     
-    Route::get('banners',[\App\Http\Controllers\admin\BannerController::class,'index'])->name('banners.list');
-    Route::get('banners/create',[\App\Http\Controllers\admin\BannerController::class,'create'])->name('banners.add');
-    Route::post('banners/save',[\App\Http\Controllers\admin\BannerController::class,'save'])->name('banners.save');
-    Route::post('allbannerlist',[\App\Http\Controllers\admin\BannerController::class,'allbannerlist'])->name('allbannerlist');
-    Route::get('changebannerstatus/{id}',[\App\Http\Controllers\admin\BannerController::class,'changebannerstatus'])->name('banners.changeblogstatus');
-    Route::get('banners/{id}/delete',[\App\Http\Controllers\admin\BannerController::class,'deletebanner'])->name('banners.delete');
-    Route::get('banners/{id}/edit',[\App\Http\Controllers\admin\BannerController::class,'editbanner'])->name('banners.edit');
-    Route::post('banners/uploadfile',[\App\Http\Controllers\admin\BannerController::class,'uploadfile'])->name('banners.uploadfile');
-    Route::post('banners/removefile',[\App\Http\Controllers\admin\BannerController::class,'removefile'])->name('banners.removefile');
-    Route::post('banners/getBannerInfoVal',[\App\Http\Controllers\admin\BannerController::class,'getBannerInfoVal'])->name('banners.getBannerInfoVal');
-    Route::get('banners/getproducts/{cat_id}',[\App\Http\Controllers\admin\BannerController::class,'getproducts'])->name('banners.getproducts');
+    
 
     Route::get('newslatters',[\App\Http\Controllers\admin\NewsLatterController::class,'index'])->name('newslatter.list');
     Route::post('allnewslatterslist',[\App\Http\Controllers\admin\NewsLatterController::class,'allnewslatterslist'])->name('allnewslatterslist');
