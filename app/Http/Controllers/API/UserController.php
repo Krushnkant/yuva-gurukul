@@ -177,7 +177,7 @@ class UserController extends BaseController
         if($request->member_id == 0){
             $validator = Validator::make($request->all(), [
                 'created_by_id' => 'required',
-                'family_member_id' => 'required',
+                'member_id' => 'required',
                 'profile_pic' => 'image|mimes:jpeg,png,jpg',
                 'first_name' => 'required',
                 'middle_name' => 'required',
@@ -197,7 +197,7 @@ class UserController extends BaseController
         }else{
             $validator = Validator::make($request->all(), [
                 'created_by_id' => 'required',
-                'family_member_id' => 'required',
+                'member_id' => 'required',
                 'profile_pic' => 'image|mimes:jpeg,png,jpg',
                 'first_name' => 'required',
                 'middle_name' => 'required',
