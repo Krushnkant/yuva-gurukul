@@ -48,3 +48,4 @@ Route::post('viewEvent',[EventController::class,'viewEvent']);
 
 
 Route::post('eventBooking',[EvenBookingController::class,'eventBooking']);
+Route::post('eventScanner',[EvenBookingController::class,'eventScanner']);

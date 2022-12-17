@@ -5,8 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\EventBooking;
+use App\Models\User;
+use App\Models\EventFees;
 use App\Models\EventBookingPerson;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class EvenBookingController extends BaseController
 {
@@ -54,4 +57,76 @@ class EvenBookingController extends BaseController
         }
         return $this->sendResponseSuccess("Event Booking Successfully");
     }
+
+    public function eventScanner(Request $request){
+        $messages = [
+            'user_id.required' =>'Please provide a User Id',
+            'booking_id.required' =>'Please provide a Booking Id',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'booking_id' => 'required'
+        ], $messages);
+
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), "Validation Errors", []);
+        }
+
+        $user = User::where('id',$request->user_id)->where('estatus',1)->first();
+        if (!$user){
+            return $this->sendError("User Not Exist", "Not Found Error", []);
+        }
+
+        $booking = EventBooking::find($request->booking_id);
+        if (!$booking){
+            return $this->sendError("Booking Not Exist", "Not Found Error", []);
+        }
+    
+        $booking->is_present = $request->user_id;
+        $booking->QR_scan_by = $request->amount;
+        $booking->atten_time = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
+        $booking->save();
+
+        $family_member_array = array();
+        $family_array = array();
+
+        $EventBookingPersons = EventBookingPerson::with('user')->where('id',$request->booking_id)->get();
+        foreach($EventBookingPersons as $EventBookingPerson){
+          $age = (int)$this->age($EventBookingPerson->user->birth_date);
+          $family_member_array['id'] = $EventBookingPerson->user->id;
+          $family_member_array['first_name'] = $EventBookingPerson->user->first_name;
+          $family_member_array['middle_name'] = $EventBookingPerson->user->middle_name;
+          $family_member_array['last_name'] = $EventBookingPerson->user->last_name;
+          $family_member_array['age'] = $age;
+          
+          $AgeRangeCheck = EventFees::whereRaw("? BETWEEN from_age AND to_age", [$age])->where('event_id',$booking->event_id)->first();
+          $family_member_array['fees'] = isset($AgeRangeCheck->fees)?$AgeRangeCheck->fees:0;
+          array_push($family_array,$family_member_array);
+        }
+
+        if($booking){
+            $events_arr = array();
+            $temp = array();
+            $temp['id'] = $booking->id;
+            $temp['amount'] = $booking->amount;
+            $temp['total_person'] = $booking->total_person;
+            $temp['event_title'] = $booking->event->event_title;
+            $temp['event_image'] = ($booking->event->event_image != "")?url('/images/event_image/'.$booking->event->event_image):"";
+            $temp['event_description'] = $booking->event->event_description;
+            $temp['event_start_time'] = date('d-m-Y h:i A', strtotime($booking->event->event_start_time));;
+            $temp['event_end_time'] = date('d-m-Y h:i A', strtotime($booking->event->event_end_time));
+            $temp['event_type'] = $booking->event->event_type;
+            $temp['event_fees'] = $booking->event->event_fees;
+            $temp['booking_member'] = $family_array;
+            array_push($events_arr,$temp);
+        }
+        return $this->sendResponseSuccess("Event Booking Successfully");
+    }
+
+    public function age($birth_date)
+    {
+        return Carbon::parse($birth_date)->age;
+    }
+
 }

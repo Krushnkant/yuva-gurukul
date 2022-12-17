@@ -233,6 +233,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
 
     Route::get('bookings/{id}',[\App\Http\Controllers\admin\BookingController::class,'index'])->name('userbookings.list');
     Route::post('allbookinglist',[\App\Http\Controllers\admin\BookingController::class,'allbookinglist'])->name('allbookinglist');
+    
 });
 
 Route::group(['prefix'=>'admin','middleware'=>['auth','userpermission'],'as'=>'admin.'],function () {
