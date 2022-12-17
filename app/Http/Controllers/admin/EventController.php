@@ -5,18 +5,17 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventFees;
-use Carbon\Carbon;
+use App\Models\User;
+use App\Models\EventHandler;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
+
 
 class EventController extends Controller
 {
     public function index(){
 
-        $usersArr = array(); //User::where('estatus',1)->where('role',2)->get()->toArray();
+        $usersArr = User::where('estatus',1)->whereIn('role',[2,3])->get()->toArray();
         $zonesArr = array(); //Zone::where('estatus',1)->get()->toArray();
         
         $page = 'Event';
@@ -151,6 +150,30 @@ class EventController extends Controller
         return response()->json(['status' => '200', 'data' => $eventFees]);
     }
 
+    public function addorupdatescanneruser(Request $request){
+       
+        $messages = [
+            'event_id.required' => 'Please provide a Event Id.',
+        ];
+        $validator = Validator::make($request->all(), [
+            'event_id' => 'required'
+        ], $messages);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors(),'status'=>'failed']);
+        }
+
+        EventHandler::where('event_id',$request->event_id)->delete();
+
+        foreach($request->scanner_user as $scanner_user){
+            $EventHandler = New EventHandler();
+            $EventHandler->event_id = $request->event_id;
+            $EventHandler->user_id = $scanner_user;
+            $EventHandler->save();
+        }
+    
+        return response()->json(['status' => '200']);
+    }
+
     public function allEventlists(Request $request){
         if ($request->ajax()) {
 
@@ -258,7 +281,8 @@ class EventController extends Controller
                     $eventStartDate = '<i class="fa fa-calendar" aria-hidden="true"></i> '.date('d-m-Y h:i A', strtotime($event->event_start_time));
                     $eventEndDate = '<i class="fa fa-calendar" aria-hidden="true"></i> '.date('d-m-Y h:i A', strtotime($event->event_end_time));
 
-                    $action = '<button id="editEventBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#eventModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
+                    $action = '<button id="addScannerUser" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#ScannerUserModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-qrcode" aria-hidden="true"></i></button>';
+                    $action .= '<button id="editEventBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#eventModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     $action .= '<button id="deleteEventBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteEventModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 
                     // $nestedData['id'] = $i;
@@ -332,5 +356,11 @@ class EventController extends Controller
         }
 
         return response()->json(['status' => '200']);
+    }
+
+    public function editscanneruser($id){
+
+        $user = EventHandler::where('event_id',$id)->get()->pluck('user_id');
+        return response()->json($user);
     }
 }

@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->enum('role', [1,2,3])->nullable()->comment('1->Admin,2->Sub Admin,3->End User');
+            $table->enum('role', [1,2,3])->default(3)->comment('1->Admin,2->Karykarta,3->Haribhagat');
             $table->integer('zone_id');
             $table->integer('parent_id');
             $table->integer('family_parent_id');
@@ -30,7 +30,7 @@ class CreateUsersTable extends Migration
             $table->text('profile_pic')->nullable();
             $table->text('address')->nullable();
             $table->dateTime('birth_date')->nullable();
-            $table->integer('gender')->default(1)->comment('1->Female,2->Male,3->Other');
+            $table->integer('gender')->default(2)->comment('1->Female,2->Male,3->Other');
             $table->integer('estatus')->default(1)->comment('1->Active,2->Deactive,3->Deleted,4->Pending');
             $table->timestamp('email_verified_at')->nullable();
             $table->dateTime('created_at')->default(\Carbon\Carbon::now());

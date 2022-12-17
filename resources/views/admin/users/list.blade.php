@@ -41,8 +41,10 @@
                                     <th>No</th>
                                     <th>Profile</th>
                                     <th>Parent User</th>
+                                    <th>Role</th>
                                     <th>Contact Info</th>
                                     <th>Other Info</th>
+                                    <th>Verify</th>
                                     <th>Status</th>
                                     <th>Registration Date</th>
                                     <th>Other</th>
@@ -53,8 +55,10 @@
                                     <th>No</th>
                                     <th>Profile</th>
                                     <th>Parent User</th>
+                                    <th>Role</th>
                                     <th>Contact Info</th>
                                     <th>Other Info</th>
+                                    <th>Verify</th>
                                     <th>Status</th>
                                     <th>Registration Date</th>
                                     <th>Other</th>
@@ -431,14 +435,16 @@
             },
             'order': [[ 6, "DESC" ]],
             'columnDefs': [
-                { "width": "8%", "targets": 0 },
-                { "width": "18%", "targets": 1 },
-                { "width": "17%", "targets": 2 },
-                { "width": "17%", "targets": 3 },
-                { "width": "10%", "targets": 4 },
+                { "width": "5%", "targets": 0 },
+                { "width": "12%", "targets": 1 },
+                { "width": "12%", "targets": 2 },
+                { "width": "12%", "targets": 3 },
+                { "width": "15%", "targets": 4 },
                 { "width": "8%", "targets": 5 },
-                { "width": "12%", "targets": 6 },
+                { "width": "8%", "targets": 6 },
                 { "width": "10%", "targets": 7 },
+                { "width": "10%", "targets": 8 },
+                { "width": "15%", "targets": 9 },
             ],
             "columns": [
                 {data: 'id', name: 'id', class: "text-center", orderable: false,
@@ -448,8 +454,10 @@
                 },
                 {data: 'profile_pic', name: 'profile_pic', class: "text-left"},
                 {data: 'parent_profile', name: 'parent_profile', class: "text-left", orderable: false},
+                {data: 'role', name: 'role', class: "text-left", orderable: false},
                 {data: 'contact_info', name: 'contact_info', class: "text-left multirow", orderable: false},
                 {data: 'other_info', name: 'other_info', class: "text-left multirow", orderable: false},
+                {data: 'verify', name: 'verify', class: "text-left", orderable: false},
                 {data: 'estatus', name: 'estatus', orderable: false, searchable: false, class: "text-center"},
                 {data: 'created_at', name: 'created_at', searchable: false, class: "text-left"},
                 {data: 'action', name: 'action', orderable: false, searchable: false, class: "text-center"},

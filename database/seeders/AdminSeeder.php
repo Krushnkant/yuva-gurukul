@@ -31,6 +31,7 @@ class AdminSeeder extends Seeder
             'first_name' => 'Swami',
             'middle_name' => 'Male',
             'last_name' => '',
+            'gender' => 2,
             'email' => 'subadmin1@gmail.com',
             'password' => Hash::make('123456789'),
             'decrypted_password' => '123456789',

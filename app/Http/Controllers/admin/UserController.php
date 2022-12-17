@@ -142,7 +142,7 @@ class UserController extends Controller
                 7 => 'action',
             );
 
-            $totalData = User::where('role',2);
+            $totalData = User::whereIn('role',[2,3]);
             if (isset($estatus)){
                 $totalData = $totalData->where('estatus',$estatus);
             }
@@ -167,7 +167,7 @@ class UserController extends Controller
 
             if(empty($request->input('search.value')))
             {
-                $users = User::where('role',2);
+                $users = User::whereIn('role',[2,3]);
                 if (isset($estatus)){
                     $users = $users->where('estatus',$estatus);
                 }
@@ -178,7 +178,7 @@ class UserController extends Controller
             }
             else {
                 $search = $request->input('search.value');
-                $users =  User::where('role',2);
+                $users =  User::whereIn('role',[2,3]);
                 if (isset($estatus)){
                     $users = $users->where('estatus',$estatus);
                 }
@@ -215,11 +215,21 @@ class UserController extends Controller
                 {
                     // $page_id = ProjectPage::where('route_url','admin.users.list')->pluck('id')->first();
 
-                    $parentUserData = User::where('id', $user->parent_id)->get();
+                    $parentUserData = User::where('id', $user->parent_id)->first();
                     $parentName = "";
-                    // if(!empty($parentUserData)){
-                    //     $parentName = $parentUserData;
-                    // }
+                    if(!empty($parentUserData)){
+                        $parent_full_name = "";
+                        if(isset($parentUserData->first_name)){
+                            $parent_full_name = $parentUserData->first_name;
+                        }
+                        if(isset($parentUserData->middle_name) && !empty($parentUserData->middle_name)){
+                            $parent_full_name .= ' '.$parentUserData->middle_name;
+                        }
+                        if(isset($parentUserData->last_name) && !empty($parentUserData->last_name)){
+                            $parent_full_name .= ' '.$parentUserData->last_name;
+                        }
+                        $parentName = $parent_full_name;
+                    }
 
                     if( $user->estatus == 1 && getUSerRole() == 1 ){
                         $estatus = '<label class="switch"><input type="checkbox" id="Userstatuscheck_'. $user->id .'" onchange="changeUserStatus('. $user->id .')" value="1" checked="checked"><span class="slider round"></span></label>';
@@ -290,11 +300,27 @@ class UserController extends Controller
                         }
                     }
 
+                    $role = "";
+                    if($user->role == 2){
+                        $role = "Karykarta";
+                    }else{
+                        $role = "Haribhagat";
+                    }
+
+                    $verify = "";
+                    if($user->verify == 0){
+                        $verify = "Not Verify";
+                    }else{
+                        $verify = "Verify";
+                    }
+
                     // $nestedData['id'] = $i;
                     $nestedData['profile_pic'] = '<img src="'. $profile_pic .'" width="40px" height="40px" alt="Profile Pic"><span class="ml-2">'.$full_name.'</span>';
                     $nestedData['parent_profile'] = $parentName;
+                    $nestedData['role'] = $role;
                     $nestedData['contact_info'] = $contact_info;
                     $nestedData['other_info'] = $other_info;
+                    $nestedData['verify'] = $verify;
                     $nestedData['estatus'] = $estatus;
                     $nestedData['created_at'] = date('d-m-Y h:i A', strtotime($user->created_at));
                     $nestedData['action'] = $action;

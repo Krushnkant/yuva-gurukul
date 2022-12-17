@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\EventFees;
 use App\Models\EventBooking;
 use App\Models\User;
+use App\Models\EventHandler;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helpers;
 use Carbon\Carbon;
@@ -16,7 +17,6 @@ class EventController extends BaseController
 {
     public function getHome()
     {
-    
         $event = Event::where( Event::raw('now()'), '<=', Event::raw('event_start_time'))->orderBy('event_start_time', 'asc')->first();
         $events_arr = array();
         $temp = array();
@@ -38,13 +38,19 @@ class EventController extends BaseController
         return $this->sendResponseWithData($data,"Home Retrieved Successfully.");
     }
 
-    public function getEvents(){
+    public function getEvents($id){
        
         $events = Event::with('event_fees')->where('estatus',1)->get();
+
         
         $events_arr = array();
         $family_array = array();
         foreach ($events as $event){
+            $scanner = 0;
+            $event_handler = EventHandler::where('event_id',$event->id)->where('user_id',$id)->get();
+            if($event_handler){
+              $scanner = 1;  
+            }
             $temp = array();
             $temp['id'] = $event->id;
             $temp['title'] = $event->event_title;
@@ -55,7 +61,7 @@ class EventController extends BaseController
             $temp['event_type'] = $event->event_type;
             $temp['event_fees'] = $event->event_fees;
             $temp['family_member'] = $family_array;
-            $temp['scanner'] = 1;
+            $temp['scanner'] = $scanner;
             array_push($events_arr,$temp);
         }
 

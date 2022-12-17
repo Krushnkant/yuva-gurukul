@@ -217,6 +217,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
     Route::post('addorupdateuser',[\App\Http\Controllers\admin\UserController::class,'addorupdateuser'])->name('users.addorupdate');
     Route::post('alluserslist',[\App\Http\Controllers\admin\UserController::class,'alluserslist'])->name('alluserslist');
     Route::get('changeuserstatus/{id}',[\App\Http\Controllers\admin\UserController::class,'changeuserstatus'])->name('users.changeuserstatus');
+
+    Route::post('addorupdatescanneruser',[\App\Http\Controllers\admin\EventController::class,'addorupdatescanneruser'])->name('events.addorupdatescanneruser');
+    Route::get('scanneruser/{id}/edit',[\App\Http\Controllers\admin\EventController::class,'editscanneruser'])->name('scanneruser.edit');
 });
 
 Route::group(['prefix'=>'admin','middleware'=>['auth','userpermission'],'as'=>'admin.'],function () {

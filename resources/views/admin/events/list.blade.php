@@ -176,6 +176,65 @@
         </div>
     </div>
 
+    
+    <div class="modal fade" id="ScannerUserModal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">            
+                <form class="form-valide" action="" id="scanneruserform" method="post" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="formtitle">Add Scanner User</h5>
+                        <button type="button" class="close" data-dismiss="modal"><span>×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="attr-cover-spin" class="cover-spin"></div>
+                        {{ csrf_field() }}
+                         <input type="hidden" name="event_id" id="event_id">
+                        <div class="row">
+                            <div class="col-xl-12 col-sm-12">
+                                <div class="form-group row">
+                                    <label class="col-lg-12 col-form-label" for="scanner_user">Scanner User <span class="text-danger">*</span></label>
+                                    <div class="col-lg-12">
+                                        <select class="form-control scanner_user" id="scanner_user" name="scanner_user[]" multiple>
+                                            <option></option>
+                                            @foreach($usersArr as $user)
+                                                <?php 
+                                                $full_name = "";
+                                                if(isset($user['first_name'])){
+                                                    $full_name = $user['first_name'];
+                                                }
+                                                if(isset($user['middle_name']) && !empty($user['middle_name'])){
+                                                    $full_name .= ' '.$user['middle_name'];
+                                                }
+                                                if(isset($user['last_name']) && !empty($user['last_name'])){
+                                                    $full_name .= ' '.$user['last_name'];
+                                                }
+                                                if(isset($user['mobile_no']) && !empty($user['mobile_no'])){
+                                                    $full_name .= ' ['.$user['mobile_no'].']';
+                                                }
+                                                   //$variant_terms = \App\Models\ProductVariantVariant::where('product_id',$product->id)->where('attribute_term_id',$product_variant)->get()->pluck('product_variant_id');
+                                                  
+                                                   //$variant_term = \App\Models\ProductVariantVariant::WhereIn('product_variant_id',$variant_terms)->get()->pluck('attribute_term_id')->toArray(); 
+                                                ?>
+                                                {{-- <option value="{{ $term['id'] }}" @if(isset($variant_term) && in_array($term['id'], $variant_term) ) selected @endif >{{ $term['attrterm_name'] }}</option> --}}
+                                                <option value="{{ $user['id'] }}" >{{ $full_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        
+                        <button type="button" class="btn btn-primary" id="save_closeScannerUserBtn">Save & Close <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="DeleteEventModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -209,6 +268,16 @@
 <!-- user list JS start -->
 <script type="text/javascript">
     $(document).ready(function() {
+
+        $('.scanner_user').select2({
+            width: '100%',
+            multiple: true,
+            placeholder: "Select...",
+            allowClear: true,
+            autoclose: false,
+            closeOnSelect: false,
+        });
+
         event_page_tabs(true);
         var i = 1;
         // $("#addMoreBtn").click(function () {
@@ -273,8 +342,8 @@
                 }
             });
         }else{
-            $(btn).prop('disabled',false);
-            $(btn).find('.loadericonfa').hide();
+            // $(btn).prop('disabled',false);
+            // $(btn).find('.loadericonfa').hide();
            
         }
 
@@ -378,12 +447,14 @@
                         }
                         
                     }
-
+                    
                     if(res.status == 200){
+                        
                         if(btn_type == 'save_close'){
                             $("#eventModal").modal('hide');
                             $(btn).prop('disabled',false);
                             $(btn).find('.loadericonfa').hide();
+                            $("#userform").trigger('reset');
                             if(res.action == 'add'){
                                 event_page_tabs(true);
                                 toastr.success("Event has been Successfully Added",'Success',{timeOut: 5000});
@@ -397,7 +468,7 @@
                         if(btn_type == 'save_new'){
                             $(btn).prop('disabled',false);
                             $(btn).find('.loadericonfa').hide();
-                            $("#eventModal").find('form').trigger('reset');
+                            $("#userform").trigger('reset');
                             $("#eventModal").find("#save_newEventBtn").removeAttr('data-action');
                             $("#eventModal").find("#save_closeEventBtn").removeAttr('data-action');
                             $("#eventModal").find("#save_newEventBtn").removeAttr('data-id');
@@ -454,6 +525,71 @@
 
     $('body').on('click', '#save_closeEventBtn', function () {
         save_user($(this),'save_close');
+    });
+
+    $('#eventModal').on('shown.bs.modal', function (e) {
+        $("#event_title").focus();
+    });
+
+
+    function save_scanner_user(btn,btn_type){
+        $(btn).prop('disabled',true);
+        $(btn).find('.loadericonfa').show();
+
+        var action  = $(btn).attr('data-action');
+
+        var formData = new FormData($("#scanneruserform")[0]);
+
+        formData.append('action',action);
+        
+        $.ajax({
+            type: 'POST',
+            url: "{{ url('admin/addorupdatescanneruser') }}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                if(res.status == 'failed'){
+                    $(btn).prop('disabled',false);
+                    $(btn).find('.loadericonfa').hide();  
+                }
+
+                if(res.status == 200){
+                    if(btn_type == 'save_close'){
+                        $("#ScannerUserModal").modal('hide');
+                        $(btn).prop('disabled',false);
+                        $(btn).find('.loadericonfa').hide();
+                        event_page_tabs(true);
+                        toastr.success("Event User been Successfully Updated",'Success',{timeOut: 5000});
+                        
+                    }
+                }
+
+                if(res.status == 400){
+                    $("#ScannerUserModal").modal('hide');
+                    $(btn).prop('disabled',false);
+                    $(btn).find('.loadericonfa').hide();
+                    event_page_tabs();
+                    toastr.error("Please try again",'Error',{timeOut: 5000});
+                }
+            },
+            error: function (data) {
+                $("#ScannerUserModal").modal('hide');
+                $(btn).prop('disabled',false);
+                $(btn).find('.loadericonfa').hide();
+                event_page_tabs();
+                toastr.error("Please try again",'Error',{timeOut: 5000});
+            }
+        });
+       
+    }
+
+    $('body').on('click', '#save_newScannerUserBtn', function () {
+        save_scanner_user($(this),'save_new');
+    });
+
+    $('body').on('click', '#save_closeScannerUserBtn', function () {
+        save_scanner_user($(this),'save_close');
     });
 
     $('#eventModal').on('shown.bs.modal', function (e) {
@@ -552,9 +688,23 @@
         });
     }
 
+    
     $('body').on('click', '#AddEventBtn', function (e) {
         $("#eventModal").find('.modal-title').html("Add Event");
+
+        $('#form_id').val(Date.now());
         $("#dynamicAddRemove").html('<div class="newAddedRowBox form-group col-sm-12 row"><div class="col-md-3 col-sm-12"><label class="col-form-label" for="fromAge">From Age <span class="text-danger">*</span></label><input type="text" class="form-control input-flat fromAge" id="fromAge" name="fromAge" placeholder=""><div id="fromAge-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div></div><div class="col-md-3 col-sm-12"><label class="col-form-label" for="toAge">To Age <span class="text-danger">*</span></label><input type="text" class="form-control input-flat toAge" id="toAge" name="toAge" placeholder=""><div id="toAge-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div></div><div class="col-md-3 col-sm-12"><label class="col-form-label" for="eventFee">Fee <span class="text-danger">*</span></label><input type="text" class="form-control input-flat eventFee" id="eventFee" name="eventFee" placeholder=""><div id="eventFee-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div></div><div class="col-md-3 col-sm-12"><label class="col-form-label"></label><button type="button" name="add" id="addMoreBtn" class="btn btn-outline-primary" style="margin-top: 12px;">Add More</button></div></div>');
+    });
+
+    $('body').on('click', '#addScannerUser', function () {
+        var eventId = $(this).attr('data-id');
+        $('#event_id').val(eventId);
+        $.get("{{ url('admin/scanneruser') }}" +'/' + eventId +'/edit', function (data) {
+            
+            $('#scanner_user').val(data).trigger('change'); 
+           
+        })
+        
     });
 
     $('body').on('click', '#editEventBtn', function () {

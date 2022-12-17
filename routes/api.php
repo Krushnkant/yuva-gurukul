@@ -43,7 +43,7 @@ Route::post('update_token',[\App\Http\Controllers\API\UserController::class,'upd
 
 Route::get('getHome', [EventController::class,'getHome']);
 
-Route::get('getEvents', [EventController::class,'getEvents']);
+Route::get('getEvents/{id}', [EventController::class,'getEvents']);
 Route::post('viewEvent',[EventController::class,'viewEvent']);
 
 
