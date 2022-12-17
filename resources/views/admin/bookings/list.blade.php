@@ -26,6 +26,7 @@
                                     <th>Title</th>
                                     <th>Total Person</th>
                                     <th>Total Amount</th>
+                                    <th>Transaction Id</th>
                                     <th>Created Date</th>
                                     <th>Other</th>
                                 </tr>
@@ -37,6 +38,7 @@
                                     <th>Title</th>
                                     <th>Total Person</th>
                                     <th>Total Amount</th>
+                                    <th>Transaction Id</th>
                                     <th>Created Date</th>
                                     <th>Other</th>
                                 </tr>
@@ -78,7 +80,7 @@
                 }
             },
             "ajax":{
-                "url": "{{ url('admin/alleventslist') }}",
+                "url": "{{ url('admin/allbookinglist') }}",
                 "dataType": "json",
                 "type": "POST",
                 "data":{ _token: '{{ csrf_token() }}'},
@@ -101,11 +103,11 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {data: 'banner', name: 'banner', class: "text-left", orderable: false},
+                {data: 'name', name: 'name', class: "text-left", orderable: false},
                 {data: 'title', name: 'title', class: "text-left", orderable: false},
-                {data: 'fees', name: 'fees', class: "text-left multirow", orderable: false},
-                {data: 'startDate', name: 'startDate', class: "text-left multirow", orderable: false},
-                {data: 'endDate', name: 'endDate', orderable: false, searchable: false, class: "text-center"},
+                {data: 'total_person', name: 'total_person', class: "text-left multirow", orderable: false},
+                {data: 'total_amount', name: 'total_amount', class: "text-left multirow", orderable: false},
+                {data: 'payment_transaction_id', name: 'payment_transaction_id', orderable: false, searchable: false, class: "text-center"},
                 {data: 'created_at', name: 'created_at', searchable: false, class: "text-left"},
                 {data: 'action', name: 'action', orderable: false, searchable: false, class: "text-center"},
             ]

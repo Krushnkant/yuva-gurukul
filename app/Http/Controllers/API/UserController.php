@@ -309,10 +309,10 @@ class UserController extends BaseController
                 'gender' => 'required',
                 'zone_id' => 'required',
                 'role' => 'required',
-                'email' => ['required', 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
                     return $query->where('estatus','!=',3);
                 })],
-                'mobile_no' => ['required', 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
                     return $query->where('estatus','!=',3);
                 })],
             ], $messages);
@@ -329,10 +329,10 @@ class UserController extends BaseController
                 'gender' => 'required',
                 'zone_id' => 'required',
                 'role' => 'required',
-                'email' => ['required', 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+                'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
                     return $query->where('role', 3)->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
                 })],
-                'mobile_no' => ['required', 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
                     return $query->where('role', 3)->where('id','!=',$request->family_member_id)->where('estatus','!=',3);
                 })],
             ], $messages); 
