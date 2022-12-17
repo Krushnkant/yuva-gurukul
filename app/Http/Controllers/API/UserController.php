@@ -269,7 +269,7 @@ class UserController extends BaseController
             'middle_name.required' =>'Please provide a Middle Name',
             'last_name.required' =>'Please provide a Last Name',
             'birth_date.required' =>'Please provide a Date of Birth.',
-            'email.required' =>'Please provide a e-mail address.',
+           // 'email.required' =>'Please provide a e-mail address.',
             'gender.required' =>'Please provide a gender.',
             'zone_id.required' =>'Please provide a Zone Id.',
             'role.required' =>'Please provide a role.',
@@ -286,12 +286,12 @@ class UserController extends BaseController
             'gender' => 'required',
             'zone_id' => 'required',
             'role' => 'required',
-            'email' => ['required', 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
+            'email' => [ 'string', 'email', 'max:191',Rule::unique('users')->where(function ($query) use ($request) {
                 return $query->where('estatus','!=',3);
             })],
-            // 'mobile_no' => ['required', 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
-            //     return $query->where('estatus','!=',3);
-            // })],
+            'mobile_no' => [ 'numeric', 'digits:10',Rule::unique('users')->where(function ($query) use ($request) {
+                return $query->where('estatus','!=',3);
+            })],
         ], $messages);
 
         if ($validator->fails()) {
