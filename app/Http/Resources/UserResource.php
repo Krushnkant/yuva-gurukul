@@ -31,6 +31,7 @@ class UserResource extends JsonResource
             'zone_id' => $this->zone_id,
             'parent_id' => $this->parent_id,
             'family_parent_id' => $this->family_parent_id,
+            'role' => ($this->role == 2)?"Karykarta":"Haribhagat",
         ];
     }
 }

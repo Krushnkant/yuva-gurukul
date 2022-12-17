@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\EventFees;
+use App\Models\EventBooking;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helpers;
@@ -50,6 +51,7 @@ class EventController extends BaseController
             $temp['event_end_time'] = date('d-m-Y h:i A', strtotime($event->event_end_time));
             $temp['event_type'] = $event->event_type;
             $temp['event_fees'] = $event->event_fees;
+            $temp['scanner'] = 1;
             array_push($events_arr,$temp);
         }
 
@@ -112,6 +114,67 @@ class EventController extends BaseController
     public function age($birth_date)
     {
         return Carbon::parse($birth_date)->age;
+    }
+
+    public function viewSummary(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'event_id' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), "Validation Errors", []);
+        }
+
+        $user = User::where('id',$request->user_id)->where('estatus',1)->first();
+        if (!$user){
+            return $this->sendError("User Not Exist", "Not Found Error", []);
+        }
+
+    
+        $event = Event::where('id',$request->event_id)->where('estatus',1)->first();
+        if (!$event){
+            return $this->sendError("Event Not Exist", "Not Found Error", []);
+        }
+
+        $users = User::where('parent_id',$request->user_id)->where('estatus',1)->get();
+        $book_data_array = array();
+        $data_array = array();
+        $book_child_array = array();
+        $child_array = array();
+
+        foreach($users as $cli_user){
+          $event_booking = EventBooking::where('parent_id',$request->user_id)->where('estatus',1)->first();
+          if($cli_user->role == 2){
+            $role = "Karykarta";
+          }else{
+            $role = "Haribhagat";
+          } 
+          if($event_booking){
+            $book_child_array['id'] = $cli_user->id;
+            $book_child_array['first_name'] = $cli_user->first_name;
+            $book_child_array['middle_name'] = $cli_user->middle_name;
+            $book_child_array['last_name'] = $cli_user->last_name;
+            $book_child_array['mobile_no'] = $cli_user->mobile_no;
+            $book_child_array['profile_pic'] = isset($cli_user->profile_pic) ? $cli_user->profile_pic : asset('images/default_avatar.jpg');
+            $book_child_array['role'] = $role;
+            array_push($book_data_array,$book_child_array);
+          }else{
+            $child_array['id'] = $cli_user->id;
+            $child_array['first_name'] = $cli_user->first_name;
+            $child_array['middle_name'] = $cli_user->middle_name;
+            $child_array['last_name'] = $cli_user->last_name;
+            $child_array['mobile_no'] = $cli_user->mobile_no;
+            $child_array['profile_pic'] = isset($cli_user->profile_pic) ? $cli_user->profile_pic : asset('images/default_avatar.jpg');
+            $book_child_array['role'] = $role;
+            array_push($data_array,$child_array);
+          }
+        }
+
+        $data['participate_member'] = $book_data_array;
+        $data['not_participate_member'] = $data_array;
+        return $this->sendResponseWithData($data,"Summary Retrieved Successfully.");
     }
 
     
