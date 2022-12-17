@@ -34,6 +34,7 @@ class AdminSeeder extends Seeder
             'email' => 'subadmin1@gmail.com',
             'password' => Hash::make('123456789'),
             'decrypted_password' => '123456789',
+            'is_delete' => 1,
         ]);
         User::create([
             'role' => 2,
@@ -44,6 +45,7 @@ class AdminSeeder extends Seeder
             'email' => 'subadmin2@gmail.com',
             'password' => Hash::make('123456789'),
             'decrypted_password' => '123456789',
+            'is_delete' => 1,
         ]);
     }
 }

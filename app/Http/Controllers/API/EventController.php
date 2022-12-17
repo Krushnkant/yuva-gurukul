@@ -20,6 +20,7 @@ class EventController extends BaseController
         $event = Event::where( Event::raw('now()'), '<=', Event::raw('event_start_time'))->orderBy('event_start_time', 'asc')->first();
         $events_arr = array();
         $temp = array();
+        $family_array = array();
         $temp['id'] = $event->id;
         $temp['title'] = $event->event_title;
         $temp['event_image'] = ($event->event_image != "")?url('/images/event_image/'.$event->event_image):"";
@@ -28,6 +29,7 @@ class EventController extends BaseController
         $temp['event_end_time'] = date('d-m-Y h:i A', strtotime($event->event_end_time));
         $temp['event_type'] = $event->event_type;
         $temp['event_fees'] = $event->event_fees;
+        $temp['family_member'] = $family_array;
         array_push($events_arr,$temp);
 
         $banner = array();
@@ -41,6 +43,7 @@ class EventController extends BaseController
         $events = Event::with('event_fees')->where('estatus',1)->get();
         
         $events_arr = array();
+        $family_array = array();
         foreach ($events as $event){
             $temp = array();
             $temp['id'] = $event->id;
@@ -51,6 +54,7 @@ class EventController extends BaseController
             $temp['event_end_time'] = date('d-m-Y h:i A', strtotime($event->event_end_time));
             $temp['event_type'] = $event->event_type;
             $temp['event_fees'] = $event->event_fees;
+            $temp['family_member'] = $family_array;
             $temp['scanner'] = 1;
             array_push($events_arr,$temp);
         }
@@ -76,7 +80,7 @@ class EventController extends BaseController
 
        
         
-        $event = Event::where('id',$request->event_id)->where('estatus',1)->first();
+        $event = Event::with('event_fees')where('id',$request->event_id)->where('estatus',1)->first();
         if (!$event){
             return $this->sendError("Event Not Exist", "Not Found Error", []);
         }
@@ -104,6 +108,7 @@ class EventController extends BaseController
         $temp['event_start_time'] = date('d-m-Y h:i A', strtotime($event->event_start_time));;
         $temp['event_end_time'] = date('d-m-Y h:i A', strtotime($event->event_end_time));
         $temp['event_type'] = $event->event_type;
+        $temp['event_fees'] = $event->event_fees;
         $temp['family_member'] = $family_array;
         array_push($events_arr,$temp);
         
