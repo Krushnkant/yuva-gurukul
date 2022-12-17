@@ -262,7 +262,7 @@ class UserController extends BaseController
     public function add_edit_member_family(Request $request){
         $messages = [
             'created_by_id.required' =>'Please provide a Created By Id',
-            'member_id.required' =>'Please provide a Member Id',
+            'family_member_id.required' =>'Please provide a Member Id',
             'profile_pic.image' =>'Please provide a Valid Extension Image(e.g: .jpg .png)',
             'profile_pic.mimes' =>'Please provide a Valid Extension Image(e.g: .jpg .png)',
             'first_name.required' =>'Please provide a First Name',
@@ -277,7 +277,7 @@ class UserController extends BaseController
 
         $validator = Validator::make($request->all(), [
             'created_by_id' => 'required',
-            'member_id' => 'required',
+            'family_member_id' => 'required',
             'profile_pic' => 'image|mimes:jpeg,png,jpg',
             'first_name' => 'required',
             'middle_name' => 'required',
