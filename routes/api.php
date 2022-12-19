@@ -45,7 +45,10 @@ Route::get('getHome', [EventController::class,'getHome']);
 
 Route::get('getEvents/{id}', [EventController::class,'getEvents']);
 Route::post('viewEvent',[EventController::class,'viewEvent']);
+Route::post('viewSummary',[EventController::class,'viewSummary']);
 
 
 Route::post('eventBooking',[EvenBookingController::class,'eventBooking']);
 Route::post('eventScanner',[EvenBookingController::class,'eventScanner']);
+
+
