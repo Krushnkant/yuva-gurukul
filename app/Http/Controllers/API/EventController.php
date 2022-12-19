@@ -181,7 +181,7 @@ class EventController extends BaseController
         $child_array = array();
 
         foreach($users as $cli_user){
-          $event_booking = EventBooking::where('event_id',$request->event_id)->where('estatus',1)->first();
+          $event_booking = EventBooking::where('user_id',$cli_user->id)->where('estatus',1)->first();
           if($cli_user->role == 2){
             $role = "Karykarta";
           }else{
