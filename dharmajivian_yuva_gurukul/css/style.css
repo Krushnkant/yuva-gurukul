@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    font-size: 24px;
+    line-height: normal;
+    height: 108px;
+    background: #335C7D;
+    color: #fff;
+    transition: all 0.4s ease;
+    margin-top: 0;
+    top: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+}
+
+header.sticky {
+    text-align: center;
+    font-size: 24px;
+    line-height: normal;
+    height: 48px;
+    background: #efc47D;
+    padding-left: 20px;
+    z-index: 9999;
+}
+
+.dharmjivian-body {
+    margin-top: 150px;
+}
+
+.privacy-policy-heading {
+    color: #73879c;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.privacy-policy-paragraph {
+    color: #73879c;
+}
+
+.privacy-policy-ul {
+    padding-left: 20px;
+}
+
+.privacy-policy-paragraph h6 {
+    font-weight: 600;
+}
+
+.dharmjivian-logo img {
+    width: 81px;
+}
+
+@media (max-width:767px) {
+    .dharmjivian-body {
+        margin-top: 110px;
+    }
+    .privacy-policy-heading {
+        font-size: 19px;
+    }
+    .privacy-policy-paragraph h6 {
+        font-size: 15px;
+    }
+    .privacy-policy-paragraph p {
+        font-size: 14px;
+    }
+    .privacy-policy-ul li {
+        font-size: 15px;
+    }
+    header {
+        line-height: normal;
+        height: 82px;
+        font-size: 19px;
+        vertical-align: middle;
+    }
+    .dharmjivian-logo img {
+        width: 54px;
+    }
+}
+
+@media (min-width:768px) and (max-width:1400px) {
+    .dharmjivian-body {
+        margin-top: 150px;
+    }
+    .privacy-policy-heading {
+        font-size: 19px;
+    }
+    .privacy-policy-paragraph p {
+        font-size: 15px;
+    }
+}
+
+@media (min-width:1401px) and (max-width:1600px) {
+    .privacy-policy-heading {
+        font-size: 20px;
+    }
+    .privacy-policy-heading p {
+        font-size: 14px;
+    }
+    .dharmjivian-body {
+        margin-top: 150px;
+    }
+}
