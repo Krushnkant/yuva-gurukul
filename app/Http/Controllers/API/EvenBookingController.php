@@ -91,7 +91,7 @@ class EvenBookingController extends BaseController
         $family_member_array = array();
         $family_array = array();
 
-        $EventBookingPersons = EventBookingPerson::with('user')->where('id',$request->booking_id)->get();
+        $EventBookingPersons = EventBookingPerson::with('user')->where('event_booking_id',$request->booking_id)->get();
         foreach($EventBookingPersons as $EventBookingPerson){
           $age = (int)$this->age($EventBookingPerson->user->birth_date);
           $family_member_array['id'] = $EventBookingPerson->user->id;
