@@ -121,7 +121,7 @@ class EvenBookingController extends BaseController
             $temp['booking_member'] = $family_array;
             array_push($events_arr,$temp);
         }
-        return $this->sendResponseSuccess("Event Scanner Successfully");
+        return $this->sendResponseWithData($events_arr,"Event Scanner Successfully");
     }
 
     public function age($birth_date)
