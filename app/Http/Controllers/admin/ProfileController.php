@@ -58,7 +58,7 @@ class ProfileController extends Controller
         $old_image = $user->profile_pic;
         $image_name = $old_image;
 
-        $user->full_name = $request->full_name;
+        $user->first_name = $request->full_name;
         $user->mobile_no = $request->mobile_no;
         $user->gender = $request->gender;
         $user->dob = $request->dob;
