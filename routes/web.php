@@ -217,6 +217,10 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
     Route::post('addorupdateuser',[\App\Http\Controllers\admin\UserController::class,'addorupdateuser'])->name('users.addorupdate');
     Route::post('alluserslist',[\App\Http\Controllers\admin\UserController::class,'alluserslist'])->name('alluserslist');
     Route::get('changeuserstatus/{id}',[\App\Http\Controllers\admin\UserController::class,'changeuserstatus'])->name('users.changeuserstatus');
+    Route::get('memberusers/{id}/child',[\App\Http\Controllers\admin\UserController::class,'memberusers'])->name('users.memberusers');
+    Route::post('allmemberuserslist/{id}',[\App\Http\Controllers\admin\UserController::class,'allmemberuserslist'])->name('allmemberuserslist');
+    Route::get('familymemberusers/{id}/family',[\App\Http\Controllers\admin\UserController::class,'familymemberusers'])->name('users.familymemberusers');
+    Route::post('allfamilymemberuserslist/{id}',[\App\Http\Controllers\admin\UserController::class,'allfamilymemberuserslist'])->name('allfamilymemberuserslist');
 
     Route::post('addorupdatescanneruser',[\App\Http\Controllers\admin\EventController::class,'addorupdatescanneruser'])->name('events.addorupdatescanneruser');
     Route::get('scanneruser/{id}/edit',[\App\Http\Controllers\admin\EventController::class,'editscanneruser'])->name('scanneruser.edit');

@@ -438,8 +438,8 @@
                 { "width": "5%", "targets": 0 },
                 { "width": "12%", "targets": 1 },
                 { "width": "12%", "targets": 2 },
-                { "width": "12%", "targets": 3 },
-                { "width": "15%", "targets": 4 },
+                { "width": "10%", "targets": 3 },
+                { "width": "12%", "targets": 4 },
                 { "width": "8%", "targets": 5 },
                 { "width": "8%", "targets": 6 },
                 { "width": "10%", "targets": 7 },
@@ -575,10 +575,17 @@
         });
     });
 
-    $('body').on('click', '#permissionUserBtn', function (e) {
+    $('body').on('click', '#memberUserBtn', function (e) {
         // e.preventDefault();
         var user_id = $(this).attr('data-id');
-        var url = "{{ url('admin/users') }}" + "/" + user_id + "/permission";
+        var url = "{{ url('admin/memberusers') }}" + "/" + user_id + "/child";
+        window.open(url,"_blank");
+    });
+
+    $('body').on('click', '#familyMemberUserBtn', function (e) {
+        // e.preventDefault();
+        var user_id = $(this).attr('data-id');
+        var url = "{{ url('admin/familymemberusers') }}" + "/" + user_id + "/family";
         window.open(url,"_blank");
     });
 </script>

@@ -291,6 +291,8 @@ class UserController extends Controller
                     }
 
                     $action='';
+                    $action .= '<button id="memberUserBtn" title="Clild Member" class="btn btn-gray text-blue btn-sm"  data-id="' .$user->id. '"><i class="fa fa-users" aria-hidden="true"></i></button>';
+                    $action .= '<button id="familyMemberUserBtn" title="Family Member" class="btn btn-gray text-blue btn-sm"  data-id="' .$user->id. '"><i class="fa fa-user" aria-hidden="true"></i></button>';
                     if ( getUSerRole() == 1 ){
                         $action .= '<button id="editUserBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#UserModal" onclick="" data-id="' .$user->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     }
@@ -378,20 +380,379 @@ class UserController extends Controller
         return response()->json(['status' => '400']);
     }
 
-    public function permissionuser($id){
-        $user_permissions = UserPermission::where('user_id',$id)->orderBy('project_page_id','asc')->get();
-        return view('admin.users.permission',compact('user_permissions'));
+    
+
+    public function memberusers($id){
+        $page = 'Member Users';
+        return view('admin.users.childmemberlist',compact('page','id'));
     }
 
-    public function savepermission(Request $request){
-        foreach ($request->permissionData as $pdata) {
-            $user_permission = UserPermission::where('user_id',$request->user_id)->where('project_page_id',$pdata['page_id'])->first();
-            $user_permission->can_read = $pdata['can_read'];
-            $user_permission->can_write = $pdata['can_write'];
-            $user_permission->can_delete = $pdata['can_delete'];
-            $user_permission->save();
-        }
+    public function allmemberuserslist(Request $request,$id){
+        if ($request->ajax()) {
+    
+            $columns = array(
+                0 => 'id',
+                1 => 'profile_pic',
+                2 => 'parent_profile',
+                3 => 'role',
+                4 => 'contact_info',
+                5 => 'other_info',
+                6 => 'verify',
+                7 => 'created_at',
+             
+            );
 
-        return response()->json(['status' => '200']);
+            $totalData = User::whereIn('role',[2,3])->where('parent_id',$id);
+            if (isset($estatus)){
+                $totalData = $totalData->where('estatus',$estatus);
+            }
+            $totalData = $totalData->count();
+
+            $totalFiltered = $totalData;
+
+            $limit = $request->input('length');
+            $start = $request->input('start');
+            // dd($columns[$request->input('order.0.column')]);
+            $order = $columns[$request->input('order.0.column')];
+            $dir = $request->input('order.0.dir');
+            
+            if($order == "id"){
+                $order = "created_at";
+                $dir = 'desc';
+            }
+
+            if($order == "profile_pic"){
+                $order = "first_name";
+            }
+
+            if(empty($request->input('search.value')))
+            {
+                $users = User::whereIn('role',[2,3])->where('parent_id',$id);
+                if (isset($estatus)){
+                    $users = $users->where('estatus',$estatus);
+                }
+                $users = $users->offset($start)
+                    ->limit($limit)
+                    ->orderBy($order,$dir)
+                    ->get();
+            }
+            else {
+                $search = $request->input('search.value');
+                $users =  User::whereIn('role',[2,3])->where('parent_id',$id);
+                if (isset($estatus)){
+                    $users = $users->where('estatus',$estatus);
+                }
+                $users = $users->where(function($query) use($search){
+                      $query->where('id','LIKE',"%{$search}%")
+                            ->orWhere('email', 'LIKE',"%{$search}%")
+                            ->orWhere('mobile_no', 'LIKE',"%{$search}%")
+                            ->orWhere('created_at', 'LIKE',"%{$search}%");
+                      })
+                      ->offset($start)
+                      ->limit($limit)
+                      ->orderBy($order,$dir)
+                      ->get();
+
+                $totalFiltered = User::whereIn('role',[2,3])->where('parent_id',$id);
+                if (isset($estatus)){
+                    $totalFiltered = $totalFiltered->where('estatus',$estatus);
+                }
+                $totalFiltered = $totalFiltered->where(function($query) use($search){
+                        $query->where('id','LIKE',"%{$search}%")
+                            ->orWhere('email', 'LIKE',"%{$search}%")
+                            ->orWhere('mobile_no', 'LIKE',"%{$search}%")
+                            ->orWhere('created_at', 'LIKE',"%{$search}%");
+                        })
+                        ->count();
+            }
+
+            $data = array();
+
+            if(!empty($users))
+            {
+                // $i=1;
+                foreach ($users as $user)
+                {
+                    // $page_id = ProjectPage::where('route_url','admin.users.list')->pluck('id')->first();
+
+                    $parentUserData = User::where('id', $user->parent_id)->first();
+                    $parentName = "";
+                    if(!empty($parentUserData)){
+                        $parent_full_name = "";
+                        if(isset($parentUserData->first_name)){
+                            $parent_full_name = $parentUserData->first_name;
+                        }
+                        if(isset($parentUserData->middle_name) && !empty($parentUserData->middle_name)){
+                            $parent_full_name .= ' '.$parentUserData->middle_name;
+                        }
+                        if(isset($parentUserData->last_name) && !empty($parentUserData->last_name)){
+                            $parent_full_name .= ' '.$parentUserData->last_name;
+                        }
+                        $parentName = $parent_full_name;
+                    }
+
+                    if(isset($user->profile_pic) && $user->profile_pic != null){
+                        $profile_pic = $user->profile_pic;
+                    }
+                    else{
+                        $profile_pic = url('images/avatar.jpg');
+                    }
+
+                    $contact_info = '';
+                    if (isset($user->email)){
+                        $contact_info = '<span><i class="fa fa-envelope" aria-hidden="true"></i> ' .$user->email .'</span>';
+                    }
+                    if (isset($user->mobile_no)){
+                        $contact_info .= '<span><i class="fa fa-phone" aria-hidden="true"></i> ' .$user->mobile_no .'</span>';
+                    }
+
+                    $other_info = '';
+                    if ($user->gender == 2){
+                        $other_info = '<span><i class="fa fa-male" aria-hidden="true"  style="font-size: 20px; margin-right: 5px"></i> Male</span>';
+                    } else if($user->gender == 1){
+                        $other_info = '<span><i class="fa fa-female" aria-hidden="true" style="font-size: 20px; margin-right: 5px"></i> Female</span>';
+                    } else {
+                        $other_info = '<span><i class="fa fa-male" aria-hidden="true" style="font-size: 20px; margin-right: 5px"></i> Other</span>';
+                    }
+                    if($user->birth_date != NULL){
+                        $other_info .= '<span><i class="fa fa-birthday-cake" aria-hidden="true"></i> '.date('d-m-Y', strtotime($user->birth_date)).'</span>';
+                    }
+
+
+                    $full_name = "";
+                    if(isset($user->first_name)){
+                        $full_name = $user->first_name;
+                    }
+                    if(isset($user->middle_name) && !empty($user->middle_name)){
+                        $full_name .= ' '.$user->middle_name;
+                    }
+                    if(isset($user->last_name) && !empty($user->last_name)){
+                        $full_name .= ' '.$user->last_name;
+                    }
+
+                    $role = "";
+                    if($user->role == 2){
+                        $role = "Karykarta";
+                    }else{
+                        $role = "Haribhagat";
+                    }
+
+                    $verify = "";
+                    if($user->verify == 0){
+                        $verify = "Not Verify";
+                    }else{
+                        $verify = "Verify";
+                    }
+
+                    // $nestedData['id'] = $i;
+                    $nestedData['profile_pic'] = '<img src="'. $profile_pic .'" width="40px" height="40px" alt="Profile Pic"><span class="ml-2">'.$full_name.'</span>';
+                    $nestedData['parent_profile'] = $parentName;
+                    $nestedData['role'] = $role;
+                    $nestedData['contact_info'] = $contact_info;
+                    $nestedData['other_info'] = $other_info;
+                    $nestedData['verify'] = $verify;
+                    $nestedData['created_at'] = date('d-m-Y h:i A', strtotime($user->created_at));
+                    $data[] = $nestedData;
+                    // $i=$i+1;
+                }
+            }
+
+            $json_data = array(
+                "draw"            => intval($request->input('draw')),
+                "recordsTotal"    => intval($totalData),
+                "recordsFiltered" => intval($totalFiltered),
+                "data" => $data,
+            );
+
+            // return json_encode($json_data);
+            echo json_encode($json_data);
+        }
+    }
+
+    public function familymemberusers($id){
+        $page = 'Member Users';
+        return view('admin.users.familymemberlist',compact('page','id'));
+    }
+
+    public function allfamilymemberuserslist(Request $request,$id){
+        if ($request->ajax()) {
+    
+            $columns = array(
+                0 => 'id',
+                1 => 'profile_pic',
+                2 => 'parent_profile',
+                3 => 'role',
+                4 => 'contact_info',
+                5 => 'other_info',
+                6 => 'verify',
+                7 => 'created_at',
+             
+            );
+
+            $totalData = User::whereIn('role',[2,3])->where('family_parent_id',$id);
+            if (isset($estatus)){
+                $totalData = $totalData->where('estatus',$estatus);
+            }
+            $totalData = $totalData->count();
+
+            $totalFiltered = $totalData;
+
+            $limit = $request->input('length');
+            $start = $request->input('start');
+            // dd($columns[$request->input('order.0.column')]);
+            $order = $columns[$request->input('order.0.column')];
+            $dir = $request->input('order.0.dir');
+            
+            if($order == "id"){
+                $order = "created_at";
+                $dir = 'desc';
+            }
+
+            if($order == "profile_pic"){
+                $order = "first_name";
+            }
+
+            if(empty($request->input('search.value')))
+            {
+                $users = User::whereIn('role',[2,3])->where('family_parent_id',$id);
+                if (isset($estatus)){
+                    $users = $users->where('estatus',$estatus);
+                }
+                $users = $users->offset($start)
+                    ->limit($limit)
+                    ->orderBy($order,$dir)
+                    ->get();
+            }
+            else {
+                $search = $request->input('search.value');
+                $users =  User::whereIn('role',[2,3])->where('family_parent_id',$id);
+                if (isset($estatus)){
+                    $users = $users->where('estatus',$estatus);
+                }
+                $users = $users->where(function($query) use($search){
+                      $query->where('id','LIKE',"%{$search}%")
+                            ->orWhere('email', 'LIKE',"%{$search}%")
+                            ->orWhere('mobile_no', 'LIKE',"%{$search}%")
+                            ->orWhere('created_at', 'LIKE',"%{$search}%");
+                      })
+                      ->offset($start)
+                      ->limit($limit)
+                      ->orderBy($order,$dir)
+                      ->get();
+
+                $totalFiltered = User::whereIn('role',[2,3])->where('family_parent_id',$id);
+                if (isset($estatus)){
+                    $totalFiltered = $totalFiltered->where('estatus',$estatus);
+                }
+                $totalFiltered = $totalFiltered->where(function($query) use($search){
+                        $query->where('id','LIKE',"%{$search}%")
+                            ->orWhere('email', 'LIKE',"%{$search}%")
+                            ->orWhere('mobile_no', 'LIKE',"%{$search}%")
+                            ->orWhere('created_at', 'LIKE',"%{$search}%");
+                        })
+                        ->count();
+            }
+
+            $data = array();
+
+            if(!empty($users))
+            {
+                // $i=1;
+                foreach ($users as $user)
+                {
+                    // $page_id = ProjectPage::where('route_url','admin.users.list')->pluck('id')->first();
+
+                    $parentUserData = User::where('id', $user->parent_id)->first();
+                    $parentName = "";
+                    if(!empty($parentUserData)){
+                        $parent_full_name = "";
+                        if(isset($parentUserData->first_name)){
+                            $parent_full_name = $parentUserData->first_name;
+                        }
+                        if(isset($parentUserData->middle_name) && !empty($parentUserData->middle_name)){
+                            $parent_full_name .= ' '.$parentUserData->middle_name;
+                        }
+                        if(isset($parentUserData->last_name) && !empty($parentUserData->last_name)){
+                            $parent_full_name .= ' '.$parentUserData->last_name;
+                        }
+                        $parentName = $parent_full_name;
+                    }
+
+                    if(isset($user->profile_pic) && $user->profile_pic != null){
+                        $profile_pic = $user->profile_pic;
+                    }
+                    else{
+                        $profile_pic = url('images/avatar.jpg');
+                    }
+
+                    $contact_info = '';
+                    if (isset($user->email)){
+                        $contact_info = '<span><i class="fa fa-envelope" aria-hidden="true"></i> ' .$user->email .'</span>';
+                    }
+                    if (isset($user->mobile_no)){
+                        $contact_info .= '<span><i class="fa fa-phone" aria-hidden="true"></i> ' .$user->mobile_no .'</span>';
+                    }
+
+                    $other_info = '';
+                    if ($user->gender == 2){
+                        $other_info = '<span><i class="fa fa-male" aria-hidden="true"  style="font-size: 20px; margin-right: 5px"></i> Male</span>';
+                    } else if($user->gender == 1){
+                        $other_info = '<span><i class="fa fa-female" aria-hidden="true" style="font-size: 20px; margin-right: 5px"></i> Female</span>';
+                    } else {
+                        $other_info = '<span><i class="fa fa-male" aria-hidden="true" style="font-size: 20px; margin-right: 5px"></i> Other</span>';
+                    }
+                    if($user->birth_date != NULL){
+                        $other_info .= '<span><i class="fa fa-birthday-cake" aria-hidden="true"></i> '.date('d-m-Y', strtotime($user->birth_date)).'</span>';
+                    }
+
+
+                    $full_name = "";
+                    if(isset($user->first_name)){
+                        $full_name = $user->first_name;
+                    }
+                    if(isset($user->middle_name) && !empty($user->middle_name)){
+                        $full_name .= ' '.$user->middle_name;
+                    }
+                    if(isset($user->last_name) && !empty($user->last_name)){
+                        $full_name .= ' '.$user->last_name;
+                    }
+
+                    $role = "";
+                    if($user->role == 2){
+                        $role = "Karykarta";
+                    }else{
+                        $role = "Haribhagat";
+                    }
+
+                    $verify = "";
+                    if($user->verify == 0){
+                        $verify = "Not Verify";
+                    }else{
+                        $verify = "Verify";
+                    }
+
+                    // $nestedData['id'] = $i;
+                    $nestedData['profile_pic'] = '<img src="'. $profile_pic .'" width="40px" height="40px" alt="Profile Pic"><span class="ml-2">'.$full_name.'</span>';
+                    $nestedData['parent_profile'] = $parentName;
+                    $nestedData['role'] = $role;
+                    $nestedData['contact_info'] = $contact_info;
+                    $nestedData['other_info'] = $other_info;
+                    $nestedData['verify'] = $verify;
+                    $nestedData['created_at'] = date('d-m-Y h:i A', strtotime($user->created_at));
+                    $data[] = $nestedData;
+                    // $i=$i+1;
+                }
+            }
+
+            $json_data = array(
+                "draw"            => intval($request->input('draw')),
+                "recordsTotal"    => intval($totalData),
+                "recordsFiltered" => intval($totalFiltered),
+                "data" => $data,
+            );
+
+            // return json_encode($json_data);
+            echo json_encode($json_data);
+        }
     }
 }
