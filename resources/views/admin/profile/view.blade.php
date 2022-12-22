@@ -33,7 +33,7 @@
                                 <img class="mr-3" src="{{ url('images/default_avatar.jpg') }}" width="80" height="80" alt="Profile" id="Profile_pic_val">
                                 @endif
                                 <div class="media-body">
-                                    <h3 class="mb-0" id="full_name_val">{{isset($user->full_name)?$user->full_name:''}}</h3>
+                                    <h3 class="mb-0" id="full_name_val">{{isset($user->first_name)?$user->first_name:''}}</h3>
                                 </div>
                             </div>
                             @if($user->mobile_no != "")
@@ -60,12 +60,12 @@
                                 <div class="col-sm-8" id="gender_val">{{ ($user->gender==1)?'Female':'Male' }}</div>
                             </div>
                             @endif
-                            @if($user->dob != "")
+                            @if($user->birth_date != "")
                             <div class="row custom-row">
                                 <div class="col-sm-4">
                                     <b>Date of Birth<span class="editorderListGem"></span></b>
                                 </div>
-                                <div class="col-sm-8" id="dob_val">{{ isset($user->dob)?$user->dob:'' }}</div>
+                                <div class="col-sm-8" id="dob_val">{{ isset($user->birth_date)?$user->birth_date:'' }}</div>
                             </div>
                             @endif
                             <div class="row custom-row">
