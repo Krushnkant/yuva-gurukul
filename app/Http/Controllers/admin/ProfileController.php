@@ -61,7 +61,7 @@ class ProfileController extends Controller
         $user->first_name = $request->full_name;
         $user->mobile_no = $request->mobile_no;
         $user->gender = $request->gender;
-        $user->dob = $request->dob;
+        $user->birth_date = $request->dob;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->decrypted_password = $request->password;
