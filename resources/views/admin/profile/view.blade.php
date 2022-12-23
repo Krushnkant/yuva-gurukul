@@ -65,7 +65,7 @@
                                 <div class="col-sm-4">
                                     <b>Date of Birth<span class="editorderListGem"></span></b>
                                 </div>
-                                <div class="col-sm-8" id="dob_val">{{ isset($user->birth_date)?$user->birth_date:'' }}</div>
+                                <div class="col-sm-8" id="dob_val">{{ isset($user->birth_date)?date('d-m-Y', strtotime($user->birth_date)):'' }}</div>
                             </div>
                             @endif
                             <div class="row custom-row">
@@ -201,9 +201,9 @@ $('body').on('click', '#EditProfileBtn', function () {
             var profile_pic = data.profile_pic;
             $('#profilepic_image_show').attr('src', profile_pic);
         }
-        $('#full_name').val(data.full_name);
+        $('#full_name').val(data.first_name);
         $('#mobile_no').val(data.mobile_no);
-        $('#dob').val(data.dob);
+        $('#dob').val(data.birth_date);
         $('#email').val(data.email);
         $('#password').val(data.decrypted_password);
         $("input[name=gender][value=" + data.gender + "]").prop('checked', true);
