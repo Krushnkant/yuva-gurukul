@@ -35,7 +35,7 @@
                                 </thead>
 
                                 <tbody>
-                                <tr>
+                                    <tr>
                                         <th style="width: 50%">Company Name</th>
                                         <td><span id="company_name_val">{{ $Settings->company_name }}</span></td>
                                     </tr>
@@ -61,51 +61,16 @@
                                         </td>
                                     </tr>
 
+                                    
                                     <tr>
-                                        <th style="width: 50%">Company Address</th>
-                                        <td><span id="company_address_val">{{ $Settings->company_address }}</span></td>
+                                        <th style="width: 50%"> Mobile No.</th>
+                                        <td><span id="mobile_no_val">{{ $Settings->mobile_no }}</span></td>
                                     </tr>
                                     <tr>
-                                        <th style="width: 50%">Company Mobile No.</th>
-                                        <td><span id="company_mobile_no_val">{{ $Settings->company_mobile_no }}</span></td>
+                                        <th style="width: 50%"> Email</th>
+                                        <td><span id="email_val">{{ $Settings->email }}</span></td>
                                     </tr>
-                                    <tr>
-                                        <th style="width: 50%">Company Email</th>
-                                        <td><span id="company_email_val">{{ $Settings->company_email }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 50%">Company Send Email</th>
-                                        <td><span id="company_send_email_val">{{ $Settings->send_email }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 50%">Youtube URL</th>
-                                        <td><span id="youtub_url_val">{{ $Settings->youtub_url }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 50%">Instagram URL</th>
-                                        <td><span id="instagram_url_val">{{ $Settings->instagram_url }}</span></td>
-                                    </tr>
-                                    <!--<tr>-->
-                                    <!--    <th style="width: 50%">Tiktok URL</th>-->
-                                    <!--    <td><span id="tiktok_url_val">{{ $Settings->tiktok_url }}</span></td>-->
-                                    <!--</tr>-->
-                                    <tr>
-                                        <th style="width: 50%">Twiter URL</th>
-                                        <td><span id="twiter_url_val">{{ $Settings->twiter_url }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 50%">facebook URL</th>
-                                        <td><span id="facebook_url_val">{{ $Settings->facebook_url }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 50%">Max Order Price</th>
-                                        <td><span id="max_order_price_val">{{ $Settings->max_order_price }}</span></td>
-                                    </tr>
-
-                                    <!-- <tr>
-                                        <th style="width: 50%">Comapny Address Map</th>
-                                        <td><span id="facebook_url_val">{{ $Settings->company_address_map }}</span></td>
-                                    </tr> -->
+                                    
                                     
 
                                    
@@ -132,34 +97,31 @@
                     <div class="modal-body">
                         <div id="attr-cover-spin" class="cover-spin"></div>
                         <div class="form-group row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="col-form-label" for="Company Name">Company Name <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" class="form-control input-flat" id="company_name" name="company_name" placeholder="">
                                 <div id="company_name-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                             </div>
+                            
+                        </div>
+
+                        <div class="form-group row">
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <label class="col-form-label" for="Company Mobile No.">Company Mobile No. <span class="text-danger">*</span>
+                                <label class="col-form-label" for="Mobile No.">Mobile No. <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control input-flat" id="company_mobile_no" name="company_mobile_no" placeholder="">
-                                <div id="company_mobile_no-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                                <input type="text" class="form-control input-flat" id="mobile_no" name="mobile_no" placeholder="">
+                                <div id="mobile_no-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <label class="col-form-label" for="Email">Email <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control input-flat" id="email" name="email" placeholder="">
+                                <div id="email-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                             </div>
                         </div>
                         
-                        <div class="form-group row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <label class="col-form-label" for="Company Email">Company Email <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control input-flat" id="company_email" name="company_email" placeholder="">
-                            <div id="company_email-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <label class="col-form-label" for="Company Email">Company Send Email <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control input-flat" id="company_send_email" name="company_send_email" placeholder="">
-                            <div id="company_send_email-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        </div>
+
                         
                         <div class="form-group row">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -178,62 +140,7 @@
                         </div>
                         </div>
                         
-                        <div class="form-group row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <label class="col-form-label" for="Company Address">Company Address <span class="text-danger">*</span>
-                            </label>
-                            <textarea class="form-control input-flat" id="company_address" name="company_address" placeholder=""></textarea>
-                            <div id="company_address-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <label class="col-form-label" for="Youtube URL">Youtube URL 
-                            </label>
-                            <input type="text" class="form-control input-flat" id="youtub_url" name="youtub_url" placeholder="">
-                            <div id="youtub_url-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        </div>
                         
-                        <div class="form-group row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <label class="col-form-label" for="Instagram URL">Instagram URL 
-                            </label>
-                            <input type="text" class="form-control input-flat" id="instagram_url" name="instagram_url" placeholder="">
-                            <div id="instagram_url-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <label class="col-form-label" for="twiter_url">Twiter URL
-                            </label>
-                            <input type="text" class="form-control input-flat" id="twiter_url" name="twiter_url" placeholder="">
-                            <div id="twiter_url-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        </div>
-                        
-                        <div class="form-group row">
-                        <!--<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">-->
-                        <!--    <label class="col-form-label" for="Tiktok URL">Tiktok URL-->
-                        <!--    </label>-->
-                        <!--    <input type="text" class="form-control input-flat" id="tiktok_url" name="tiktok_url" placeholder="">-->
-                        <!--    <div id="tiktok_url-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>-->
-                        <!--</div>-->
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <label class="col-form-label" for="Facebook URL">Facebook URL
-                            </label>
-                            <input type="text" class="form-control input-flat" id="facebook_url" name="facebook_url" placeholder="">
-                            <div id="facebook_url-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                            <label class="col-form-label" for="max_order_price">Max Order Price
-                            </label>
-                            <input type="number" class="form-control input-flat" id="max_order_price" name="max_order_price" placeholder="">
-                            <div id="max_order_price-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-form-label" for="Company Address Map">Company Address Map<span class="text-danger">*</span>
-                            </label>
-                            <textarea class="form-control input-flat" id="company_address_map" name="company_address_map" placeholder=""></textarea>
-                            <div id="company_address_map-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
@@ -260,9 +167,8 @@
         $('#company_name-error').html("");
         $('#company_logo-error').html("");
         $('#company_favicon-error').html("");
-        $('#company_address-error').html("");
-        $('#company_mobile_no-error').html("");
-        $('#company_email-error').html("");
+        $('#mobile_no-error').html("");
+        $('#email-error').html("");
         $('#company_send_email-error').html("");
         $('#youtub_url-error').html("");
         $('#instagram_url-error').html("");
@@ -282,8 +188,8 @@
             $('#invoice_no').val(data.invoice_no);
             $('#company_name').val(data.company_name);
             $('#company_address').val(data.company_address);
-            $('#company_mobile_no').val(data.company_mobile_no);
-            $('#company_email').val(data.company_email);
+            $('#mobile_no').val(data.mobile_no);
+            $('#email').val(data.email);
             $('#company_send_email').val(data.send_email);
             $('#youtub_url').val(data.youtub_url);
             $('#instagram_url').val(data.instagram_url);
@@ -357,16 +263,16 @@
                         $('#company_address-error').hide();
                     }
 
-                    if (res.errors.company_mobile_no) {
-                        $('#company_mobile_no-error').show().text(res.errors.company_mobile_no);
+                    if (res.errors.mobile_no) {
+                        $('#mobile_no-error').show().text(res.errors.mobile_no);
                     } else {
-                        $('#company_mobile_no-error').hide();
+                        $('#mobile_no-error').hide();
                     }
 
-                    if (res.errors.company_email) {
-                        $('#company_email-error').show().text(res.errors.company_emai);
+                    if (res.errors.email) {
+                        $('#email-error').show().text(res.errors.company_emai);
                     } else {
-                        $('#company_email-error').hide();
+                        $('#email-error').hide();
                     }
 
                     if (res.errors.company_send_email) {
@@ -423,8 +329,8 @@
                     }
                    
                     $("#company_address_val").html(res.Settings.company_address);
-                    $("#company_mobile_no_val").html(res.Settings.company_mobile_no);
-                    $("#company_email_val").html(res.Settings.company_email);
+                    $("#mobile_no_val").html(res.Settings.mobile_no);
+                    $("#email_val").html(res.Settings.email);
                     $("#company_send_email_val").html(res.Settings.send_email);
                     $("#youtub_url_val").html(res.Settings.youtub_url);
                     $("#instagram_url_val").html(res.Settings.instagram_url);

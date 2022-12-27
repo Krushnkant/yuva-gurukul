@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\CustomerDeviceToken;
 use App\Models\Notification;
 use App\Models\ProductVariant;
-use App\Models\ {Zone, User};
+use App\Models\ {Zone, User,Settings,ProfessionalDetails,ContactUs};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -574,6 +574,91 @@ class UserController extends BaseController
         }
 
         return $this->sendResponseWithData($notifications_arr,"Notifications Retrieved Successfully.");
+    }
+
+
+    public function settings(){
+        
+        $Setting = Settings::first();
+        $data['company_name'] = $Setting->company_name;
+        $data['email'] = $Setting->email;
+        $data['mobile_no'] = $Setting->mobile_no;
+        $data['company_logo'] = isset($Setting->company_logo)?url('images/company/'.$Setting->company_logo):"";
+        $data['company_favicon'] = isset($Setting->company_favicon)?url('images/company/'.$Setting->company_favicon):"";
+          
+        return $this->sendResponseWithData($data,"Setting Data Retrieved Successfully.");
+    }
+
+    public function add_edit_professional(Request $request){
+        $messages = [
+            'user_id.required' =>'Please provide a User Id',   
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required', 
+        ], $messages);
+
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), "Validation Errors", []);
+        }
+
+        $user = User::where('id',$request->user_id)->where('estatus',1)->first();
+        if (!$user){
+            return $this->sendError("User Not Exist", "Not Found Error", []);
+        }
+
+
+        $details = ProfessionalDetails::where('user_id',$request->user_id)->first();
+        if($details){
+           $details = ProfessionalDetails::find($details->id);
+        }else{
+            $details = new ProfessionalDetails();
+        }
+        $details->user_id = $request->user_id;
+        $details->type = $request->type;
+        $details->title = $request->title;
+        $details->education = $request->education;
+        $details->address = $request->address;
+        $details->save();
+        return $this->sendResponseWithData($details,"Updated Professional Data Successfully");
+    }
+
+    public function getProfessionalDetails($id){
+
+        $user = User::where('id',$id)->where('estatus',1)->first();
+        if (!$user){
+            return $this->sendError("User Not Exist", "Not Found Error", []);
+        }
+
+        $ProfessionalDetails = ProfessionalDetails::where('user_id',$id)->first();
+        return $this->sendResponseWithData($ProfessionalDetails,"Professional Details Retrieved Successfully.");
+    }
+
+    public function contact(Request $request){
+        $messages = [
+            'user_id.required' =>'Please provide a User Id',   
+            'message.required' =>'Please provide a Message',   
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required', 
+            'message' => 'required', 
+        ], $messages);
+
+        if ($validator->fails()) {
+            return $this->sendError($validator->errors(), "Validation Errors", []);
+        }
+
+        $user = User::where('id',$request->user_id)->where('estatus',1)->first();
+        if (!$user){
+            return $this->sendError("User Not Exist", "Not Found Error", []);
+        }
+
+        $contact = new ContactUs();
+        $contact->user_id = $request->user_id;
+        $contact->message = $request->message;
+        $contact->save();
+        return $this->sendResponseWithData($contact,"Add Contact Successfully");
     }
 
    

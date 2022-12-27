@@ -237,6 +237,10 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
 
     Route::get('bookings/{id}',[\App\Http\Controllers\admin\BookingController::class,'index'])->name('userbookings.list');
     Route::post('allbookinglist',[\App\Http\Controllers\admin\BookingController::class,'allbookinglist'])->name('allbookinglist');
+
+    Route::get('settings',[\App\Http\Controllers\admin\SettingsController::class,'index'])->name('settings.list');
+    Route::post('updateInvoiceSetting',[\App\Http\Controllers\admin\SettingsController::class,'updateInvoiceSetting'])->name('settings.updateInvoiceSetting');
+    Route::get('settings/edit',[\App\Http\Controllers\admin\SettingsController::class,'editSettings'])->name('settings.edit');
     
 });
 
@@ -323,9 +327,7 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','userpermission'],'as'=>'a
     Route::post('allSuggestionslist',[\App\Http\Controllers\admin\SuggestionController::class,'allSuggestionslist'])->name('allSuggestionslist');
     Route::get('suggestion/{id}/delete',[\App\Http\Controllers\admin\SuggestionController::class,'deleteSuggestion'])->name('suggestion.delete');
 
-    Route::get('settings',[\App\Http\Controllers\admin\SettingsController::class,'index'])->name('settings.list');
-    Route::post('updateInvoiceSetting',[\App\Http\Controllers\admin\SettingsController::class,'updateInvoiceSetting'])->name('settings.updateInvoiceSetting');
-    Route::get('settings/edit',[\App\Http\Controllers\admin\SettingsController::class,'editSettings'])->name('settings.edit');
+    
 
     Route::get('homesettings',[\App\Http\Controllers\admin\HomeSettingController::class,'index'])->name('homesettings.create');
     Route::post('homesettings/edit',[\App\Http\Controllers\admin\HomeSettingController::class,'editHomeSettings'])->name('homesettings.edit');
