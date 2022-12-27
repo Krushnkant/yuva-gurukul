@@ -150,6 +150,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ url('admin/contacts') }}" aria-expanded="false">
+                        <i class="fa fa-address-book" aria-hidden="true"></i><span class="nav-text">Contacts
+                    </span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ url('admin/settings') }}" aria-expanded="false">
                         <i class="fa fa-cog" aria-hidden="true"></i><span class="nav-text">Settings
                     </span>

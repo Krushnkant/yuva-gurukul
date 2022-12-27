@@ -238,6 +238,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
     Route::get('bookings/{id}',[\App\Http\Controllers\admin\BookingController::class,'index'])->name('userbookings.list');
     Route::post('allbookinglist',[\App\Http\Controllers\admin\BookingController::class,'allbookinglist'])->name('allbookinglist');
 
+    Route::get('contacts',[\App\Http\Controllers\admin\ContactusController::class,'index'])->name('contacts.list');
+    Route::post('allcontactslist',[\App\Http\Controllers\admin\ContactusController::class,'allcontactslist'])->name('allcontactslist');
+
     Route::get('settings',[\App\Http\Controllers\admin\SettingsController::class,'index'])->name('settings.list');
     Route::post('updateInvoiceSetting',[\App\Http\Controllers\admin\SettingsController::class,'updateInvoiceSetting'])->name('settings.updateInvoiceSetting');
     Route::get('settings/edit',[\App\Http\Controllers\admin\SettingsController::class,'editSettings'])->name('settings.edit');
