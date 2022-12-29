@@ -150,6 +150,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ url('admin/request_karya_karta') }}" aria-expanded="false">
+                        <i class="fa fa-users" aria-hidden="true"></i><span class="nav-text">Request Karyakarta
+                    </span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ url('admin/contacts') }}" aria-expanded="false">
                         <i class="fa fa-address-book" aria-hidden="true"></i><span class="nav-text">Contacts
                     </span>

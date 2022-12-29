@@ -7,7 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Category;
 use App\Models\CustomerDeviceToken;
 use App\Models\Notification;
-use App\Models\ProductVariant;
+use App\Models\RequestKaryaKarta;
 use App\Models\ {Zone, User,Settings,ProfessionalDetails,ContactUs};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -544,33 +544,15 @@ class UserController extends BaseController
             return $this->sendError("User Not Exist", "Not Found Error", []);
         }
 
-        $notifications = Notification::with('applicationdropdown')->whereIn('user_id',[0,$request->user_id])->orderBy('created_at','DESC')->get();
+        $notifications = Notification::where('user_id',$request->user_id)->orderBy('created_at','DESC')->get();
         $notifications_arr = array();
         foreach ($notifications as $notification){
             $temp = array();
             $temp['id'] = $notification->id;
             $temp['title'] = $notification->notify_title;
             $temp['desc'] = $notification->notify_desc;
-            $temp['image'] = isset($notification->notify_thumb)?'public/'.$notification->notify_thumb:null;
-            $temp['application_dropdown_id'] = isset($notification->application_dropdown_id)?$notification->application_dropdown_id:0;
-            $temp['application_dropdown'] = isset($notification->application_dropdown_id)?$notification->applicationdropdown->title:null;
-
-            if($notification->application_dropdown_id == 5){
-                $category = Category::where('id',$notification->parent_value)->first();
-                $product = ProductVariant::where('id',$notification->value)->pluck('product_title')->first();
-                $temp['value_id'] = $notification->value;
-                $temp['value_title'] = $product;
-            }
-            elseif($notification->application_dropdown_id == 7){
-                $category = Category::where('id',$notification->value)->first();
-                $temp['value_id'] = $category->id;
-                $temp['value_title'] = $category->category_name;
-            }
-            else{
-                $temp['value_id'] = null;
-                $temp['value_title'] = $notification->value;
-            }
-
+            $temp['image'] = isset($notification->notify_thumb)?$notification->notify_thumb:"";
+            $temp['value_id'] = $notification->value_id;
             $temp['type'] = $notification->type;
             array_push($notifications_arr,$temp);
         }
@@ -661,6 +643,33 @@ class UserController extends BaseController
         $contact->message = $request->message;
         $contact->save();
         return $this->sendResponseWithData($contact,"Add Contact Successfully");
+    }
+
+    public function request_karyakarta(Request $request){
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'request_by_user_id' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError($validator->errors(), "Validation Errors", []);
+        }
+
+        $user = User::where('id',$request->user_id)->where('estatus',1)->first();
+        if (!$user){
+            return $this->sendError("User Not Exist", "Not Found Error", []);
+        }
+        $KaryaKarta =  RequestKaryaKarta::where('user_id',$request->user_id)->where('estatus',1)->first();
+        if(!$KaryaKarta){
+            $requestkaryakarta = New RequestKaryaKarta();
+            $requestkaryakarta->user_id = $request->user_id;
+            $requestkaryakarta->request_by_user_id = $request->request_by_user_id;
+            $requestkaryakarta->date_time = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
+            $requestkaryakarta->created_at = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
+            $requestkaryakarta->save();
+        }
+      
+        return $this->sendResponseSuccess("Send Request Successfully.");
     }
 
    

@@ -59,5 +59,8 @@ Route::post('add_edit_professional',[UserController::class,'add_edit_professiona
 Route::get('getProfessionalDetails/{id}',[UserController::class,'getProfessionalDetails']);
 
 Route::post('contactus',[UserController::class,'contact']);
+Route::post('notifications',[UserController::class,'notifications']);
+
+Route::post('request_karyakarta',[UserController::class,'request_karyakarta']);
 
 
