@@ -32,9 +32,6 @@ class RequestKaryaKartaController extends Controller
                 7 => 'created_at',
                 8 => 'action',
             );
-
-            
-
             $totalData = RequestKaryaKarta::count();
             $totalFiltered = $totalData;
 
@@ -98,8 +95,8 @@ class RequestKaryaKartaController extends Controller
                     
                     $action='';
                     if($review->estatus == 1){
-                        $action .= '<button id="AcceptBtn" onclick="acceptstatus('. $review->id .')" class="btn btn-gray text-blue btn-sm" data-id="' .$review->id. '">Accept</button>';
-                        $action .= '<button id="Reject" onclick="rejectstatus('. $review->id .')" class="btn btn-gray text-blue btn-sm" data-id="' .$review->id. '">Reject</button>';
+                        $action .= '<button id="AcceptBtn" onclick="acceptstatus('. $review->id .')" class="btn btn-success text-white btn-sm" data-id="' .$review->id. '">Accept</button>';
+                        $action .= '<button id="Reject" onclick="rejectstatus('. $review->id .')" class="btn btn-danger text-white btn-sm" data-id="' .$review->id. '">Reject</button>';
                     }else if($review->estatus == 2){
                         $action .= 'Accept';
                     }else{

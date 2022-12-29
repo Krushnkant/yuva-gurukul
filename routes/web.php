@@ -81,6 +81,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
     Route::post('categories/uploadfile',[\App\Http\Controllers\admin\CategoryController::class,'uploadfile'])->name('categories.uploadfile');
     Route::post('categories/removefile',[\App\Http\Controllers\admin\CategoryController::class,'removefile'])->name('categories.removefile');
     
+    
 });
 
 
