@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventFees;
 use App\Models\User;
+use App\Models\Notification;
+use App\Models\EventBooking;
 use App\Models\EventHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -105,6 +107,11 @@ class EventController extends Controller
                 $Fees->event_id = $event->id;
                 $Fees->save();
             }
+        }
+
+        //send notification to customers
+        if ($action == "add"){
+            $this->sendnotificationevent($event->id);
         }
     
         return response()->json(['status' => '200', 'action' => $action]);
@@ -285,6 +292,8 @@ class EventController extends Controller
                     $action .= '<button id="editEventBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#eventModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     $action .= '<button id="deleteEventBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteEventModal" onclick="" data-id="' .$event->id. '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
                     $action .= '<button id="bookingUser" class="btn btn-gray text-success btn-sm" onclick="" data-id="' .$event->id. '"><i class="fa fa-ticket" aria-hidden="true"></i></button>';
+                    $action .= '<button id="resendEventNotificationBtn" class="btn btn-gray text-blue btn-sm" data-id="'.$event->id.'">Send Event Notification</button>';
+                    $action .= '<button id="resendBookingNotificationBtn" class="btn btn-gray text-blue btn-sm" data-id="'.$event->id.'">Send Booking Notification</button>';
                     // $nestedData['id'] = $i;
                     $nestedData['banner'] = '<img src="'. $event_image .'" width="40px" height="40px" alt="Event Banner">';
                     $nestedData['title'] = $event_title;
@@ -309,8 +318,6 @@ class EventController extends Controller
             echo json_encode($json_data);
         }
     }
-
-  
 
     public function editevent($id){
         $event = Event::with('event_fees')->find($id);
@@ -341,27 +348,73 @@ class EventController extends Controller
         return response()->json(['status' => '400']);
     }
 
-    public function permissionuser($id){
-        $user_permissions = UserPermission::where('user_id',$id)->orderBy('project_page_id','asc')->get();
-        return view('admin.users.permission',compact('user_permissions'));
-    }
-
-    public function savepermission(Request $request){
-        foreach ($request->permissionData as $pdata) {
-            $user_permission = UserPermission::where('user_id',$request->user_id)->where('project_page_id',$pdata['page_id'])->first();
-            $user_permission->can_read = $pdata['can_read'];
-            $user_permission->can_write = $pdata['can_write'];
-            $user_permission->can_delete = $pdata['can_delete'];
-            $user_permission->save();
-        }
-
-        return response()->json(['status' => '200']);
-    }
-
     public function editscanneruser($id){
 
         $user = EventHandler::where('event_id',$id)->get()->pluck('user_id');
         return response()->json($user);
+    }
+
+    public function sendnotificationevent($id){
+        $event = Event::find($id);
+        if ($event){
+            $notification_array['title'] = $event->event_title;
+            $notification_array['message'] = $event->event_description;
+            // $notification_array['notificationdata'] = $notification_arr;
+            $notification_array['image'] = url('images/event_image/' .$event->event_image);
+            $notificationsend = sendPushNotification_event($notification_array);
+            if($notificationsend){
+                $userids = \App\Models\CustomerDeviceToken::pluck('user_id')->all();
+                foreach($userids as $userid){
+                    $notification = New Notification();
+                    $notification->user_id = $userid;
+                    $notification->notify_title = $event->event_title;
+                    $notification->notify_desc = $event->event_description;
+                    $notification->notify_thumb = url('images/event_image/' .$event->event_image);
+                    $notification->value_id = $event->id;
+                    $notification->type = 'event';
+                    $notification->save();
+                }
+
+                return response()->json(['status' => '200']);
+            }else{
+                return response()->json(['status' => '400']);
+            } 
+        }
+        return response()->json(['status' => '400']);
+    }
+
+
+    public function sendnotificationbooking($id){
+        $event = Event::find($id);
+        if ($event){
+            $notification_array['title'] = "Event Remainder";
+            $notification_array['message'] = $event->event_title;
+            // $notification_array['notificationdata'] = $notification_arr;
+            $notification_array['image'] = url('images/event_image/' .$event->event_image);
+            $bookinguserids = EventBooking::where('event_id',$id)->get()->pluck('user_id');
+            if(count($bookinguserids)){
+                $notificationsend = sendPushNotification_remainder($bookinguserids,$notification_array);
+                if($notificationsend){
+                    $userids = \App\Models\CustomerDeviceToken::pluck('user_id')->all();
+                    foreach($userids as $userid){
+                        $notification = New Notification();
+                        $notification->user_id = $userid;
+                        $notification->notify_title = "Event Remainder";
+                        $notification->notify_desc = $event->event_title;
+                        $notification->notify_thumb = url('images/event_image/' .$event->event_image);
+                        $notification->value_id = $event->id;
+                        $notification->type = 'remainder';
+                        $notification->save();
+                    }
+                    return response()->json(['status' => '200']);
+                }else{
+                    return response()->json(['status' => '400']);
+                }
+            }else{
+                return response()->json(['status' => '200']);
+            } 
+        }
+        return response()->json(['status' => '400']);
     }
 
     

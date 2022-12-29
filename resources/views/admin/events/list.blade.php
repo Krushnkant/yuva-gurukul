@@ -663,11 +663,11 @@
             'order': [[ 6, "DESC" ]],
             'columnDefs': [
                 { "width": "8%", "targets": 0 },
-                { "width": "12%", "targets": 1 },
+                { "width": "8%", "targets": 1 },
                 { "width": "20%", "targets": 2 },
-                { "width": "15%", "targets": 3 },
-                { "width": "10%", "targets": 4 },
-                { "width": "10%", "targets": 5 },
+                { "width": "12%", "targets": 3 },
+                { "width": "12%", "targets": 4 },
+                { "width": "12%", "targets": 5 },
                 { "width": "12%", "targets": 6 },
                 { "width": "13%", "targets": 7 },
             ],
@@ -677,7 +677,7 @@
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
-                {data: 'banner', name: 'banner', class: "text-left", orderable: false},
+                {data: 'banner', name: 'banner', class: "text-center", orderable: false},
                 {data: 'title', name: 'title', class: "text-left", orderable: false},
                 {data: 'fees', name: 'fees', class: "text-left multirow", orderable: false},
                 {data: 'startDate', name: 'startDate', class: "text-left multirow", orderable: false},
@@ -786,6 +786,30 @@
         var event_id = $(this).attr('data-id');
         var url = "{{ url('admin/bookings') }}" + "/" + event_id;
         window.open(url,"_blank");
+    });
+
+    $('body').on('click', '#resendEventNotificationBtn', function () {
+        var eventId = $(this).attr('data-id');
+        $.get("{{ url('admin/events') }}" +'/' + eventId +'/sendnotificationevent', function (data) {
+            if(data.status == 200){
+                toastr.success("Send Event Notification",'Success',{timeOut: 5000});
+            }
+            if(data.status == 400){
+                toastr.error("Please try again",'Error',{timeOut: 5000});
+            }
+        })
+    });
+
+    $('body').on('click', '#resendBookingNotificationBtn', function () {
+        var eventId = $(this).attr('data-id');
+        $.get("{{ url('admin/events') }}" +'/' + eventId +'/sendnotificationbooking', function (data) {
+            if(data.status == 200){
+                toastr.success("Send Event Notification",'Success',{timeOut: 5000});
+            }
+            if(data.status == 400){
+                toastr.error("Please try again",'Error',{timeOut: 5000});
+            }
+        })
     });
 
  

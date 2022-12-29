@@ -213,6 +213,10 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
     Route::get('events/{id}/edit',[\App\Http\Controllers\admin\EventController::class,'editevent'])->name('event.edit');
     Route::get('events/{id}/delete',[\App\Http\Controllers\admin\EventController::class,'deleteevent'])->name('events.delete');
     Route::get('eventfree/{id}/delete',[\App\Http\Controllers\admin\EventController::class,'deleteeventfree'])->name('eventfree.delete');
+    Route::get('events/{id}/sendnotificationevent',[\App\Http\Controllers\admin\EventController::class,'sendnotificationevent'])->name('event.sendnotificationevent');
+    Route::get('events/{id}/sendnotificationbooking',[\App\Http\Controllers\admin\EventController::class,'sendnotificationbooking'])->name('event.sendnotificationbooking');
+
+
     Route::get('users',[\App\Http\Controllers\admin\UserController::class,'index'])->name('users.list');
     Route::post('addorupdateuser',[\App\Http\Controllers\admin\UserController::class,'addorupdateuser'])->name('users.addorupdate');
     Route::post('alluserslist',[\App\Http\Controllers\admin\UserController::class,'alluserslist'])->name('alluserslist');
