@@ -512,7 +512,7 @@ class UserController extends BaseController
             return $this->sendError("User Not Exist", "Not Found Error", []);
         }
 
-        $device = CustomerDeviceToken::where('user_id',$request->user_id)->first();
+        $device = CustomerDeviceToken::where('user_id',$request->user_id)->where('device_type',$request->device_type)->first();
         if ($device){
             $device->token = $request->token;
             $device->device_type = $request->device_type;
@@ -525,7 +525,9 @@ class UserController extends BaseController
         }
         $device->save();
 
-        return $this->sendResponseSuccess("Device Token updated.");
+        $data = new UserResource($user);
+       
+        return $this->sendResponseWithData($data,"Device Token updated.");
     }
 
     public function notifications(Request $request){
