@@ -65,4 +65,6 @@ Route::post('request_karyakarta',[UserController::class,'request_karyakarta']);
 
 Route::post('getBooking',[EvenBookingController::class,'getBooking']);
 
+Route::get('sendnotificationbookingremainder',[EventController::class,'sendnotificationbookingremainder']);
+
 

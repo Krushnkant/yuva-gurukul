@@ -554,6 +554,7 @@ class UserController extends BaseController
             $temp['image'] = isset($notification->notify_thumb)?$notification->notify_thumb:"";
             $temp['value_id'] = $notification->value_id;
             $temp['type'] = $notification->type;
+            $temp['created_at'] = $notification->created_at;
             array_push($notifications_arr,$temp);
         }
 
