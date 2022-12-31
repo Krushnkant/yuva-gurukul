@@ -221,6 +221,8 @@ class EventController extends BaseController
             if($event){
                 $notification_array['title'] = "Event Remainder";
                 $notification_array['message'] = $event->event_title;
+                // $notification_array['type'] = "remainder";
+                // $notification_array['value_id'] = $event->id;
                 // $notification_array['notificationdata'] = $notification_arr;
                 $notification_array['image'] = url('images/event_image/' .$event->event_image);
                 $bookinguserids = EventBooking::where('event_id',$event->id)->get()->pluck('user_id');
