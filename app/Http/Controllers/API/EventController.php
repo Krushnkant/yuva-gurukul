@@ -36,9 +36,9 @@ class EventController extends BaseController
         if($event){
             $scanner = 0;
             if($id > 0){
-                $event_handler = EventHandler::where('event_id',$event->id)->where('user_id',$id)->get();
+                $event_handler = EventHandler::where('event_id',$event->id)->where('user_id',$id)->first();
                 if($event_handler){
-                $scanner = 1;  
+                   $scanner = 1;  
                 }
             }
             $temp['id'] = $event->id;
@@ -68,7 +68,7 @@ class EventController extends BaseController
         $family_array = array();
         foreach ($events as $event){
             $scanner = 0;
-            $event_handler = EventHandler::where('event_id',$event->id)->where('user_id',$id)->get();
+            $event_handler = EventHandler::where('event_id',$event->id)->where('user_id',$id)->first();
             if($event_handler){
               $scanner = 1;  
             }
