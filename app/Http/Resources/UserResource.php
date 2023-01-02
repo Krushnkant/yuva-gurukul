@@ -15,7 +15,7 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $requestkaryakarta = RequestKaryaKarta::where('user_id',$this->id)->order_by('created_at', 'desc')->first();
+        $requestkaryakarta = RequestKaryaKarta::where('user_id',$this->id)->first();
         $request_karyakarta_status = 0;
         if($requestkaryakarta){
             $request_karyakarta_status = $requestkaryakarta->estatus;
