@@ -33,15 +33,17 @@ class EventController extends BaseController
         $events_arr = array();
         $temp = array();
         $family_array = array();
-        $temp['id'] = $event->id;
-        $temp['title'] = $event->event_title;
-        $temp['event_image'] = ($event->event_image != "")?url('/images/event_image/'.$event->event_image):"";
-        $temp['event_description'] = $event->event_description;
-        $temp['event_start_time'] = date('d-m-Y h:i A', strtotime($event->event_start_time));;
-        $temp['event_end_time'] = date('d-m-Y h:i A', strtotime($event->event_end_time));
-        $temp['event_type'] = $event->event_type;
-        $temp['event_fees'] = $event->event_fees;
-        $temp['family_member'] = $family_array;
+        if($event){
+            $temp['id'] = $event->id;
+            $temp['title'] = $event->event_title;
+            $temp['event_image'] = ($event->event_image != "")?url('/images/event_image/'.$event->event_image):"";
+            $temp['event_description'] = $event->event_description;
+            $temp['event_start_time'] = date('d-m-Y h:i A', strtotime($event->event_start_time));;
+            $temp['event_end_time'] = date('d-m-Y h:i A', strtotime($event->event_end_time));
+            $temp['event_type'] = $event->event_type;
+            $temp['event_fees'] = $event->event_fees;
+            $temp['family_member'] = $family_array;
+        }
         array_push($events_arr,$temp);
 
         
