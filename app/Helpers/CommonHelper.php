@@ -353,35 +353,7 @@ function compressImage($source, $destination, $quality) {
     return $destination; 
 }
 
-function is_wishlist($item_id,$item_type){
-    if($item_id!=0 && $item_id!=""){
-        if(session()->has('customer')){
-            $wishlist_data = \App\Models\Wishlist::where('item_id',$item_id)->where('item_type',$item_type)->where('user_id',session('customer.id'))->first();
-            if ($wishlist_data){
-                return true;
-            }
-        }else{
-            $cookie_data = stripslashes(Cookie::get('product_wishlist'));
-            $wishlist_data = json_decode($cookie_data, true);
-            if($wishlist_data){
-                $item_id_list = array_column($wishlist_data, 'item_id');
-                $variant_id_is_there = $item_id;
-                if(in_array($variant_id_is_there, $item_id_list))
-                {
-                    foreach($wishlist_data as $keys => $values)
-                    {
-                        if($wishlist_data[$keys]["item_id"] == $item_id)
-                        {
-                            return true; 
-                        }
-                    }
-                }
-            }
-        }
-        
-        return false;
-    }
-}
+
 
 function is_login(){
 
@@ -392,25 +364,7 @@ function is_login(){
     return false;
 }
 
-function add_address($data)
-{
-    $address = New \App\Models\Address();
-    $address->first_name = $data->first_name;
-    $address->last_name = $data->last_name;
-    $address->email = $data->email;
-    $address->mobile_no = $data->mobile_no;
-    $address->address = $data->address;
-    $address->address2 = $data->address2;
-    $address->country = $data->country;
-    $address->state = $data->state;
-    $address->city = $data->city;
-    $address->pincode = $data->pincode;
-    $address->save();
-    if($address){
-        return true;
-    }
-    return false;
-}
+
 
 function getPaymentStatus($payment_status){
     if($payment_status == 1){
