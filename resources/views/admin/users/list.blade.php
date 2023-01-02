@@ -139,15 +139,15 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            
                             <div class="col-md-4 col-sm-12">
-                                <label class="col-form-label" for="gender">Gender
+                                <label class="col-form-label" for="roleDropdown">Role
                                 </label>
-                                <div>
-                                    <label class="radio-inline mr-3"><input type="radio" name="gender" value="1" checked> Female</label>
-                                    <label class="radio-inline mr-3"><input type="radio" name="gender" value="2"> Male</label>
-                                    <label class="radio-inline mr-3"><input type="radio" name="gender" value="3"> Other</label>
-                                </div>
-                                <div id="gender-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                                <select id='roleDropdown' name="roleDropdown"  class="form-control">
+                                    {{-- <option value="">Select Zone</option> --}}
+                                    <option value="3">Haribhagat</option>
+                                    <option value="2">Karyakarta</option>
+                                </select>
                             </div>
                             @if(isset($usersArr) && !empty($usersArr))
                             <div class="col-md-4 col-sm-12">
@@ -155,8 +155,24 @@
                                 </label>
                                 <select id='parentUser' name="parentUser"  class="form-control">
                                     <option value="">Select User</option>
-                                    @foreach($usersArr as $userData)
-                                        <option value="<?php echo $userData['id']; ?>"><?php echo $userData['first_name']; ?></option>
+                                    @foreach($usersArr as $parentUserData)
+                                        <?php 
+                                            $parentName = "";
+                                            if(!empty($parentUserData)){
+                                                $parent_full_name = "";
+                                                if(isset($parentUserData['first_name'])){
+                                                    $parent_full_name = $parentUserData['first_name'];
+                                                }
+                                                if(isset($parentUserData['middle_name']) && !empty($parentUserData['middle_name'])){
+                                                    $parent_full_name .= ' '.$parentUserData['middle_name'];
+                                                }
+                                                if(isset($parentUserData['last_name']) && !empty($parentUserData['last_name'])){
+                                                    $parent_full_name .= ' '.$parentUserData['last_name'];
+                                                }
+                                                $parentName = $parent_full_name;
+                                            }
+                                        ?>
+                                        <option value="<?php echo $parentUserData['id']; ?>"><?php echo $parentName; ?></option>
                                     @endforeach
                                 </select>
                             </div>
@@ -175,10 +191,21 @@
                             @endif
                         </div>
                         <div class="form-group row">
+                            
                             <div class="col-md-4 col-sm-12">
                                 <label class="col-form-label" for="address">Address
                                 </label>
                                 <textarea id="address" name="address" class="form-control"></textarea>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <label class="col-form-label" for="gender">Gender
+                                </label>
+                                <div>
+                                    <label class="radio-inline mr-3"><input type="radio" name="gender" value="1" checked> Female</label>
+                                    <label class="radio-inline mr-3"><input type="radio" name="gender" value="2"> Male</label>
+                                    <label class="radio-inline mr-3"><input type="radio" name="gender" value="3"> Other</label>
+                                </div>
+                                <div id="gender-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                             </div>
                         </div>
                     </div>
@@ -503,7 +530,7 @@
     $('body').on('click', '#editUserBtn', function () {
         var user_id = $(this).attr('data-id');
         $.get("{{ url('admin/users') }}" +'/' + user_id +'/edit', function (data) {
-            // console.log(data);
+        
             $('#UserModal').find('.modal-title').html("Edit User");
             $('#UserModal').find('#save_closeUserBtn').attr("data-action","update");
             $('#UserModal').find('#save_newUserBtn').attr("data-action","update");
@@ -526,6 +553,7 @@
             $('#dob').val(data.birth_date);
             $("#parentUser option[value=" + data.parent_id + "]").prop('selected', true);
             $("#zoneDropdown option[value=" + data.zone_id + "]").prop('selected', true);
+            $("#roleDropdown option[value=" + data.role + "]").prop('selected', true);
             $("input[name=gender][value=" + data.gender + "]").prop('checked', true);
             $('#address').val(data.address);
         })

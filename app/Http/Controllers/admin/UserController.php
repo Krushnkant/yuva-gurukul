@@ -72,14 +72,13 @@ class UserController extends Controller
         else{
             $action = "add";
             $user = new User();
-            $user->role = 2;
-            $user->estatus = 2;
             $user->created_at = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
             $image_name=null;
         }
 
         $user->parent_id = $request->parentUser;
         $user->zone_id = $request->zoneDropdown;
+        $user->role = $request->roleDropdown;
         $user->first_name = $request->first_name;
         $user->middle_name = $request->middle_name;
         $user->last_name = $request->last_name;
