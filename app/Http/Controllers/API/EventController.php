@@ -43,9 +43,8 @@ class EventController extends BaseController
             $temp['event_type'] = $event->event_type;
             $temp['event_fees'] = $event->event_fees;
             $temp['family_member'] = $family_array;
+            array_push($events_arr,$temp);
         }
-        array_push($events_arr,$temp);
-
         
         $data['banners'] = $banner_array;
         $data['upcoming_event'] = $events_arr;
