@@ -25,8 +25,8 @@ Route::get('admin/403_page',[\App\Http\Controllers\admin\AuthController::class,'
 
 Route::get('admin/403_page',[\App\Http\Controllers\admin\AuthController::class,'invalid_page'])->name('admin.403_page');
 
-Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
-
+//Route::group(['prefix'=>'admin','as'=>'admin.'],function () {
+Route::group(['prefix'=>'admin','middleware'=>['auth'],'as'=>'admin.'],function () {
     Route::get('dashboard', [\App\Http\Controllers\admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('events',[\App\Http\Controllers\admin\EventController::class,'index'])->name('events.list');
     Route::post('alleventslist',[\App\Http\Controllers\admin\EventController::class,'allEventlists'])->name('alleventslist');
