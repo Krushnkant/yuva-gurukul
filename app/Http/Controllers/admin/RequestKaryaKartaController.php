@@ -134,7 +134,7 @@ class RequestKaryaKartaController extends Controller
         $requestkaryakarta->estatus = 2;
         $requestkaryakarta->save();
         if($requestkaryakarta){
-            $user = User::where('id',$requestkaryakarta->id)->first();
+            $user = User::where('id',$requestkaryakarta->user_id)->first();
             $user->role = 2;
             $user->save();
         }
