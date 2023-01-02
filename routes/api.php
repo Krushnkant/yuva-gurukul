@@ -43,7 +43,7 @@ Route::get('removeMemberFamily/{id}',[UserController::class,'removeMemberFamily'
 
 Route::post('update_token',[UserController::class,'update_token']);
 
-Route::get('getHome', [EventController::class,'getHome']);
+Route::get('getHome/{id?}', [EventController::class,'getHome']);
 
 Route::get('getEvents/{id}', [EventController::class,'getEvents']);
 Route::post('viewEvent',[EventController::class,'viewEvent']);

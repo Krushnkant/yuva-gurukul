@@ -17,7 +17,7 @@ use Carbon\Carbon;
 
 class EventController extends BaseController
 {
-    public function getHome()
+    public function getHome($id = 0)
     {
         $btemp = array();
         $banner_array = array();
@@ -34,6 +34,13 @@ class EventController extends BaseController
         $temp = array();
         $family_array = array();
         if($event){
+            $scanner = 0;
+            if($id > 0){
+                $event_handler = EventHandler::where('event_id',$event->id)->where('user_id',$id)->get();
+                if($event_handler){
+                $scanner = 1;  
+                }
+            }
             $temp['id'] = $event->id;
             $temp['title'] = $event->event_title;
             $temp['event_image'] = ($event->event_image != "")?url('/images/event_image/'.$event->event_image):"";
@@ -43,6 +50,7 @@ class EventController extends BaseController
             $temp['event_type'] = $event->event_type;
             $temp['event_fees'] = $event->event_fees;
             $temp['family_member'] = $family_array;
+            $temp['scanner'] = $scanner;
             array_push($events_arr,$temp);
         }
         
