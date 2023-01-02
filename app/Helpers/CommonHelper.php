@@ -610,11 +610,11 @@ function sendPushNotification_event($data)
 function sendPushNotification_remainder($bookinguserids,$data)
 {
     // Do not send push notification from localhost
-    if (env('APP_ENV') == 'local') {
-        \Illuminate\Support\Facades\Log::info($data);
-        \Illuminate\Support\Facades\Log::info("local environment");
-        return true;
-    }else{
+    // if (env('APP_ENV') == 'local') {
+    //     \Illuminate\Support\Facades\Log::info($data);
+    //     \Illuminate\Support\Facades\Log::info("local environment");
+    //     return true;
+    // }else{
         $tokens_android = \App\Models\CustomerDeviceToken::whereIn('user_id',$bookinguserids)->where('device_type','android')->pluck('token')->all();
         $tokens_ios = \App\Models\CustomerDeviceToken::whereIn('user_id',$bookinguserids)->where('device_type','ios')->pluck('token')->all();
       
@@ -660,7 +660,7 @@ function sendPushNotification_remainder($bookinguserids,$data)
         );
         sendNotification($data,"android");*/
         return true;
-    }
+   // }
 }
 
 function sendNotification($data,$type){
