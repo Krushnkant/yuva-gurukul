@@ -122,17 +122,22 @@ class RequestKaryaKartaController extends Controller
     }
 
     public function rejectstatus($id){
-        $review = RequestKaryaKarta::find($id);
-        $review->estatus = 3;
-        $review->save();
+        $requestkaryakarta = RequestKaryaKarta::find($id);
+        $requestkaryakarta->estatus = 3;
+        $requestkaryakarta->save();
         return response()->json(['status' => '200']);
        
     }
 
     public function acceptstatus($id){
-        $review = RequestKaryaKarta::find($id);
-        $review->estatus = 2;
-        $review->save();
+        $requestkaryakarta = RequestKaryaKarta::find($id);
+        $requestkaryakarta->estatus = 2;
+        $requestkaryakarta->save();
+        if($requestkaryakarta){
+            $user = User::where('user_id',$requestkaryakarta->id)->first();
+            $user->role = 3;
+            $user->save();
+        }
         return response()->json(['status' => '200']);
        
     }
