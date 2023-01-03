@@ -203,7 +203,7 @@ class EvenBookingController extends BaseController
             return $this->sendError($validator->errors(), "Validation Errors", []);
         }
 
-        $booking = EventBooking::where('booking_id',$request->booking_id)->first();
+        $booking = EventBooking::where('id',$request->booking_id)->first();
         if (!$booking){
             return $this->sendError("Booking Not Exist", "Not Found Error", []);
         }
