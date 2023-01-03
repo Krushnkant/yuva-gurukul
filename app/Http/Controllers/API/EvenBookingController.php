@@ -93,7 +93,11 @@ class EvenBookingController extends BaseController
 
         $EventBookingPersons = EventBookingPerson::with('user')->where('event_booking_id',$request->booking_id)->get();
         foreach($EventBookingPersons as $EventBookingPerson){
-          $age = (int)$this->age($EventBookingPerson->user->birth_date);
+            if(isset($EventBookingPerson->user)){     
+                $age = (int)$this->age($EventBookingPerson->user->birth_date);
+             }else{
+                $age = 0;    
+             }
           $family_member_array['id'] = $EventBookingPerson->user->id;
           $family_member_array['first_name'] = $EventBookingPerson->user->first_name;
           $family_member_array['middle_name'] = $EventBookingPerson->user->middle_name;
@@ -155,7 +159,11 @@ class EvenBookingController extends BaseController
 
             $EventBookingPersons = EventBookingPerson::with('user')->where('event_booking_id',$booking->id)->get();
             foreach($EventBookingPersons as $EventBookingPerson){
-            $age = (int)$this->age($EventBookingPerson->user->birth_date);
+            if(isset($EventBookingPerson->user)){     
+               $age = (int)$this->age($EventBookingPerson->user->birth_date);
+            }else{
+               $age = 0;    
+            }
             $family_member_array['id'] = $EventBookingPerson->user->id;
             $family_member_array['first_name'] = $EventBookingPerson->user->first_name;
             $family_member_array['middle_name'] = $EventBookingPerson->user->middle_name;
@@ -215,7 +223,11 @@ class EvenBookingController extends BaseController
 
         $EventBookingPersons = EventBookingPerson::with('user')->where('event_booking_id',$booking->id)->get();
         foreach($EventBookingPersons as $EventBookingPerson){
-        $age = (int)$this->age($EventBookingPerson->user->birth_date);
+        if(isset($EventBookingPerson->user)){     
+            $age = (int)$this->age($EventBookingPerson->user->birth_date);
+            }else{
+            $age = 0;    
+            }
         $family_member_array['id'] = $EventBookingPerson->user->id;
         $family_member_array['first_name'] = $EventBookingPerson->user->first_name;
         $family_member_array['middle_name'] = $EventBookingPerson->user->middle_name;
