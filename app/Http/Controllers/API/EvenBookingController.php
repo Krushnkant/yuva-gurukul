@@ -190,21 +190,20 @@ class EvenBookingController extends BaseController
 
     public function getBookingDetails(Request $request){
         $messages = [
-            //'booking_id.required' =>'Please provide a Booking Id',
-            'event_id.required' =>'Please provide a Event Id',
-            'user_id.required' =>'Please provide a Event Id',
+            'booking_id.required' =>'Please provide a Booking Id',
+            // 'event_id.required' =>'Please provide a Event Id',
+            // 'user_id.required' =>'Please provide a Event Id',
         ];
 
         $validator = Validator::make($request->all(), [
-            'event_id' => 'required',
-            'user_id' => 'required',
+            'booking_id' => 'required'
         ], $messages);
 
         if ($validator->fails()) {
             return $this->sendError($validator->errors(), "Validation Errors", []);
         }
 
-        $booking = EventBooking::where('event_id',$request->event_id)->where('user_id',$request->user_id)->first();
+        $booking = EventBooking::where('booking_id',$request->booking_id)->first();
         if (!$booking){
             return $this->sendError("Booking Not Exist", "Not Found Error", []);
         }

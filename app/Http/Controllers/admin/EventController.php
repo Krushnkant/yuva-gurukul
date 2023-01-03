@@ -391,25 +391,27 @@ class EventController extends Controller
             $notification_array['message'] = $event->event_title;
             // $notification_array['notificationdata'] = $notification_arr;
             $notification_array['image'] = url('images/event_image/' .$event->event_image);
-            $bookinguserids = EventBooking::where('event_id',$id)->get()->pluck('user_id');
-            if(count($bookinguserids)){
-                $notificationsend = sendPushNotification_remainder($bookinguserids,$notification_array);
-                if($notificationsend){
-                    $userids = \App\Models\CustomerDeviceToken::pluck('user_id')->all();
-                    foreach($userids as $userid){
+            $bookings = EventBooking::where('event_id',$id)->get();
+            if(count($bookings)){
+                // $notificationsend = sendPushNotification_remainder($bookinguserids,$notification_array);
+                // if($notificationsend){
+                    //$userids = \App\Models\CustomerDeviceToken::pluck('user_id')->all();
+                    foreach($bookings as $booking){
+                        $bookinguserid = $booking->user_id;
+                        sendPushNotification_remainder($bookinguserid,$notification_array);
                         $notification = New Notification();
-                        $notification->user_id = $userid;
+                        $notification->user_id = $booking->user_id;
                         $notification->notify_title = "Event Remainder";
                         $notification->notify_desc = $event->event_title;
                         $notification->notify_thumb = url('images/event_image/' .$event->event_image);
-                        $notification->value_id = $event->id;
+                        $notification->value_id = $booking->id;
                         $notification->type = 'remainder';
                         $notification->save();
                     }
                     return response()->json(['status' => '200']);
-                }else{
-                    return response()->json(['status' => '400']);
-                }
+                // }else{
+                //     return response()->json(['status' => '400']);
+                // }
             }else{
                 return response()->json(['status' => '200']);
             } 

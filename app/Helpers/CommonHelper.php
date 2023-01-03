@@ -561,7 +561,7 @@ function sendPushNotification_event($data)
     }
 }
 
-function sendPushNotification_remainder($bookinguserids,$data)
+function sendPushNotification_remainder($bookinguserid,$data)
 {
     // Do not send push notification from localhost
     // if (env('APP_ENV') == 'local') {
@@ -569,8 +569,8 @@ function sendPushNotification_remainder($bookinguserids,$data)
     //     \Illuminate\Support\Facades\Log::info("local environment");
     //     return true;
     // }else{
-        $tokens_android = \App\Models\CustomerDeviceToken::whereIn('user_id',$bookinguserids)->where('device_type','android')->pluck('token')->all();
-        $tokens_ios = \App\Models\CustomerDeviceToken::whereIn('user_id',$bookinguserids)->where('device_type','ios')->pluck('token')->all();
+        $tokens_android = \App\Models\CustomerDeviceToken::where('user_id',$bookinguserid)->where('device_type','android')->pluck('token')->all();
+        $tokens_ios = \App\Models\CustomerDeviceToken::where('user_id',$bookinguserid)->where('device_type','ios')->pluck('token')->all();
       
         if (count($tokens_android) == 0 && count($tokens_ios) == 0) {
 //                Log::info('no token found');
