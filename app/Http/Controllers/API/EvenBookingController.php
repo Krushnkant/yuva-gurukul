@@ -171,6 +171,7 @@ class EvenBookingController extends BaseController
                
                 $temp = array();
                 $temp['id'] = $booking->id;
+                $temp['event_id'] = $booking->event->id;
                 $temp['amount'] = $booking->amount;
                 $temp['total_person'] = $booking->total_person;
                 $temp['event_title'] = $booking->event->event_title;
