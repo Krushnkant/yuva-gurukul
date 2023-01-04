@@ -82,6 +82,9 @@ class EvenBookingController extends BaseController
         if (!$booking){
             return $this->sendError("Booking Not Exist", "Not Found Error", []);
         }
+        if($booking->is_present > 0){
+            return $this->sendError("Booking Allready Exist", "Not Found Error", []);
+        }
     
         $booking->is_present = 1;
         $booking->QR_scan_by = $request->user_id;
