@@ -86,7 +86,7 @@ class EvenBookingController extends BaseController
             return $this->sendError("Booking Allready Exist", "Not Found Error", []);
         }
     
-        $booking->is_present = 1;
+        $booking->is_present = '1';
         $booking->QR_scan_by = $request->user_id;
         $booking->atten_time = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
         $booking->save();
